@@ -1,6 +1,12 @@
 "use client";
 
-import React, { useEffect, useState, useMemo, useRef } from "react";
+import React, {
+  useEffect,
+  useState,
+  useMemo,
+  useRef,
+  useCallback,
+} from "react";
 import { motion, useScroll, useTransform, useInView } from "framer-motion";
 import { format } from "date-fns";
 import {
@@ -36,6 +42,70 @@ function AnimatedSection({
       className={className}
     >
       {children}
+    </motion.div>
+  );
+}
+
+/* ────────────── TYPING ANIMATION ────────────── */
+const typingPhrases = [
+  "Building ideas into code_",
+  "Crafting digital experiences_",
+  "Full-stack developer & creator_",
+  "Designing seamless interfaces_",
+  "Turning concepts into reality_",
+];
+
+function TypingAnimation() {
+  const [currentPhrase, setCurrentPhrase] = useState(0);
+  const [displayText, setDisplayText] = useState("");
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [charIndex, setCharIndex] = useState(0);
+
+  useEffect(() => {
+    const phrase = typingPhrases[currentPhrase];
+    let timeout: NodeJS.Timeout;
+
+    if (!isDeleting && charIndex < phrase.length) {
+      // Typing forward
+      timeout = setTimeout(
+        () => {
+          setDisplayText(phrase.substring(0, charIndex + 1));
+          setCharIndex(charIndex + 1);
+        },
+        60 + Math.random() * 40,
+      );
+    } else if (!isDeleting && charIndex === phrase.length) {
+      // Pause at end
+      timeout = setTimeout(() => setIsDeleting(true), 2000);
+    } else if (isDeleting && charIndex > 0) {
+      // Deleting
+      timeout = setTimeout(() => {
+        setDisplayText(phrase.substring(0, charIndex - 1));
+        setCharIndex(charIndex - 1);
+      }, 30);
+    } else if (isDeleting && charIndex === 0) {
+      // Move to next phrase
+      setIsDeleting(false);
+      setCurrentPhrase((prev) => (prev + 1) % typingPhrases.length);
+    }
+
+    return () => clearTimeout(timeout);
+  }, [charIndex, isDeleting, currentPhrase]);
+
+  return (
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ delay: 0.8, duration: 1 }}
+      className="flex items-center gap-2"
+    >
+      <span className="font-mono text-[10px] tracking-[0.2em] text-black/20 uppercase">
+        //
+      </span>
+      <span className="font-mono text-[12px] md:text-[13px] tracking-tight text-black/40">
+        {displayText}
+      </span>
+      <span className="inline-block w-[2px] h-[14px] bg-[#006054] animate-pulse" />
     </motion.div>
   );
 }
@@ -171,69 +241,68 @@ export default function Home() {
                   Hello — I&apos;m
                 </h2>
                 <h1 className="font-bold font-heading text-[18vw] md:text-[14vw] lg:text-[11vw] leading-[0.85] tracking-[-0.05em] text-[#1a1a1a]">
-                  Riddhiman
+                  javaadde
                 </h1>
+
+                {/* Subtitle & Experience — directly under name */}
+                <div className="flex flex-col md:flex-row gap-8 md:gap-16 mt-8">
+                  {/* Left: FullStack Developer / Kochi */}
+                  <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{
+                      delay: 0.4,
+                      duration: 0.8,
+                      ease: [0.16, 1, 0.3, 1],
+                    }}
+                    className="flex flex-col gap-1"
+                  >
+                    <div className="flex items-center gap-3 mb-3">
+                      <span className="font-mono text-[10px] tracking-[0.3em] font-medium text-[#006054]">
+                        LE|
+                      </span>
+                    </div>
+                    <span className="text-[14px] md:text-[15px] text-black/80 font-medium tracking-tight">
+                      FullStack Developer
+                    </span>
+                    <span className="text-[14px] md:text-[15px] text-black/80 font-medium tracking-tight">
+                      Based in Kochi
+                    </span>
+                  </motion.div>
+
+                  {/* Right: Experience */}
+                  <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{
+                      delay: 0.5,
+                      duration: 0.8,
+                      ease: [0.16, 1, 0.3, 1],
+                    }}
+                    className="flex flex-col gap-4"
+                  >
+                    <div className="flex items-start gap-4">
+                      <span className="font-body text-[10px] tracking-[0.2em] uppercase text-black/30 pt-1 font-bold">
+                        [EXPERIENCE]
+                      </span>
+                      <div className="flex flex-col gap-1">
+                        <div className="flex items-center gap-2">
+                          <span className="text-[14px] text-black/20">→</span>
+                          <span className="text-[14px] text-[#1a1a1a] font-medium tracking-tight underline decoration-black/10 underline-offset-4">
+                            Aeza, Bangalore, Ind
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  </motion.div>
+                </div>
               </motion.div>
             </div>
           </div>
 
-          {/* Subtitle & Experience Bar */}
-          <div className="grid grid-cols-12 gap-0 pb-16 items-end">
-            {/* Left: Product Designer / Kolkata */}
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{
-                delay: 0.4,
-                duration: 0.8,
-                ease: [0.16, 1, 0.3, 1],
-              }}
-              className="col-span-12 md:col-span-4 flex flex-col gap-1"
-            >
-              <div className="flex items-center gap-3 mb-6">
-                <span className="font-mono text-[10px] tracking-[0.3em] font-medium text-[#006054]">
-                  LE|
-                </span>
-              </div>
-              <span className="text-[14px] md:text-[15px] text-black/80 font-medium tracking-tight">
-                Product Designer
-              </span>
-              <span className="text-[14px] md:text-[15px] text-black/80 font-medium tracking-tight">
-                Based in Kolkata
-              </span>
-            </motion.div>
-
-            {/* Right: Experience */}
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{
-                delay: 0.5,
-                duration: 0.8,
-                ease: [0.16, 1, 0.3, 1],
-              }}
-              className="col-span-12 md:col-start-7 md:col-span-6 mt-10 md:mt-0 flex flex-col gap-4"
-            >
-              <div className="flex items-start gap-4">
-                <span className="font-body text-[10px] tracking-[0.2em] uppercase text-black/30 pt-1 font-bold">
-                  [EXPERIENCE]
-                </span>
-                <div className="flex flex-col gap-1">
-                  <div className="flex items-center gap-2">
-                    <span className="text-[14px] text-black/20">→</span>
-                    <span className="text-[14px] text-[#1a1a1a] font-medium tracking-tight underline decoration-black/10 underline-offset-4">
-                      Aeza, Bangalore, Ind
-                    </span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <span className="text-[14px] text-black/20">→</span>
-                    <span className="text-[14px] text-[#1a1a1a] font-medium tracking-tight underline decoration-black/10 underline-offset-4">
-                      DesignStudio, Kolkata, Ind
-                    </span>
-                  </div>
-                </div>
-              </div>
-            </motion.div>
+          {/* Typing Animation — Bottom Left */}
+          <div className="pb-16">
+            <TypingAnimation />
           </div>
         </div>
 
