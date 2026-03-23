@@ -25,9 +25,9 @@ const NavBar = () => {
   return (
     <>
       <nav
-        className={`fixed top-0 left-0 w-full px-6 md:px-12 py-5 flex justify-between items-center z-[1000] transition-all duration-500 ${
+        className={`fixed top-0 left-0 w-full px-6 md:px-12 lg:px-16 py-3 flex justify-between items-center z-[1000] transition-all duration-500 ${
           scrolled
-            ? "bg-[#f4f3ef]/80 backdrop-blur-xl border-b border-black/[0.04]"
+            ? "bg-[#f4f3ef]/80 backdrop-blur-xl border-b border-black/[0.04] py-2.5"
             : "bg-transparent"
         }`}
       >
@@ -37,7 +37,7 @@ const NavBar = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.8 }}
-            className="font-black text-2xl tracking-[-0.06em] text-[#1a1a1a]"
+            className="font-black text-xl tracking-[-0.06em] text-[#1a1a1a]"
           >
             RD
           </motion.div>
@@ -55,10 +55,10 @@ const NavBar = () => {
               <Link
                 href={item.href}
                 target={item.href.startsWith("http") ? "_blank" : undefined}
-                className="group flex items-center gap-1.5 text-[14px] font-medium tracking-tight text-[#1a1a1a]/60 hover:text-[#1a1a1a] transition-all duration-300"
+                className="group flex items-center gap-1.5 text-[11px] font-bold tracking-tight text-[#1a1a1a]/40 hover:text-[#1a1a1a] transition-all duration-300 uppercase"
               >
                 {item.name}
-                <ArrowUpRight className="w-3.5 h-3.5 opacity-40 group-hover:opacity-100 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all duration-300" />
+                <ArrowUpRight className="w-2.5 h-2.5 opacity-30 group-hover:opacity-100 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all duration-300" />
               </Link>
             </motion.div>
           ))}
@@ -69,11 +69,11 @@ const NavBar = () => {
             transition={{ delay: 0.5, duration: 0.5 }}
           >
             <Link
-              href="mailto:your@email.com"
-              className="connect-btn flex items-center gap-3"
+              href="mailto:javad@example.com"
+              className="bg-accent text-white text-[10px] font-bold tracking-[0.15em] uppercase px-4 py-2 transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] relative overflow-hidden flex items-center gap-1.5 "
             >
               LET&apos;S CONNECT
-              <ArrowUpRight className="w-3.5 h-3.5 opacity-70" />
+              <ArrowUpRight className="w-3 h-3 opacity-70" />
             </Link>
           </motion.div>
         </div>
