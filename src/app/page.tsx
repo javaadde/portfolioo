@@ -28,6 +28,7 @@ function AnimatedSection({
 }: {
   children: React.ReactNode;
   className?: string;
+  1;
   delay?: number;
 }) {
   const ref = useRef(null);
@@ -105,7 +106,10 @@ function TypingAnimation() {
       <span className="font-mono text-[12px] md:text-[13px] tracking-tight text-black/40">
         {displayText}
       </span>
-      <span className="inline-block w-[2px] h-[14px] bg-[#006054] animate-pulse" />
+      <span
+        className="inline-block w-[2px] h-[16px] bg-[#006054]"
+        style={{ animation: "blink 1s step-end infinite" }}
+      />
     </motion.div>
   );
 }
@@ -152,13 +156,27 @@ export default function Home() {
     },
   ];
 
-  const companies = [
-    { name: "Design Studio", logo: "Design Studio." },
-    { name: "Club", logo: "Club" },
-    { name: "GeoServe", logo: "geoServe" },
-    { name: "Geminus", logo: "GEMINUS" },
-    { name: "Cardinal", logo: "CARDINAL" },
-    { name: "Absa", logo: "absa" },
+  const socials = [
+    {
+      name: "GitHub",
+      href: "https://github.com/javaadde",
+      icon: <Github className="w-4 h-4" />,
+    },
+    {
+      name: "LinkedIn",
+      href: "https://linkedin.com/in/javaadde",
+      icon: <Linkedin className="w-4 h-4" />,
+    },
+    {
+      name: "Twitter",
+      href: "https://twitter.com/javaadde",
+      icon: <Twitter className="w-4 h-4" />,
+    },
+    {
+      name: "Email",
+      href: "mailto:javaadde@gmail.com",
+      icon: <Mail className="w-4 h-4" />,
+    },
   ];
 
   const experiences = [
@@ -255,13 +273,8 @@ export default function Home() {
                       duration: 0.8,
                       ease: [0.16, 1, 0.3, 1],
                     }}
-                    className="flex flex-col gap-1"
+                    className="flex flex-col gap-1 mt-12"
                   >
-                    <div className="flex items-center gap-3 mb-3">
-                      <span className="font-mono text-[10px] tracking-[0.3em] font-medium text-[#006054]">
-                        LE|
-                      </span>
-                    </div>
                     <span className="text-[14px] md:text-[15px] text-black/80 font-medium tracking-tight">
                       FullStack Developer
                     </span>
@@ -279,7 +292,7 @@ export default function Home() {
                       duration: 0.8,
                       ease: [0.16, 1, 0.3, 1],
                     }}
-                    className="flex flex-col gap-4"
+                    className="flex flex-col gap-4 mt-12"
                   >
                     <div className="flex items-start gap-4">
                       <span className="font-body text-[10px] tracking-[0.2em] uppercase text-black/30 pt-1 font-bold">
@@ -289,7 +302,7 @@ export default function Home() {
                         <div className="flex items-center gap-2">
                           <span className="text-[14px] text-black/20">→</span>
                           <span className="text-[14px] text-[#1a1a1a] font-medium tracking-tight underline decoration-black/10 underline-offset-4">
-                            Aeza, Bangalore, Ind
+                            Devxtra, Kochi, Ind
                           </span>
                         </div>
                       </div>
@@ -306,7 +319,7 @@ export default function Home() {
           </div>
         </div>
 
-        {/* Companies Bar */}
+        {/* Socials Bar */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
@@ -317,20 +330,28 @@ export default function Home() {
             {/* Label Cell */}
             <div className="w-[30%] md:w-[25%] lg:w-[16.666%] py-8 border-r border-black/[0.08] flex items-center pr-8">
               <span className="font-body text-[14px] text-black/60 leading-tight font-medium">
-                Companies I&apos;ve <br /> contributed to @
+                Find me <br /> on the web @
               </span>
             </div>
-            {/* Logo Cells */}
+            {/* Social Cells */}
             <div className="flex-1 flex overflow-hidden">
-              {companies.map((company, i) => (
-                <div
+              {socials.map((social, i) => (
+                <a
                   key={i}
-                  className="flex-1 flex items-center justify-center border-r border-black/[0.08] last:border-r-0 py-8 bg-black/[0.01] hover:bg-black/[0.03] transition-colors duration-500"
+                  href={social.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  data-cursor-label={social.name}
+                  data-cursor-type="social-btn"
+                  className="flex-1 flex items-center justify-center gap-2 border-r border-black/[0.08] last:border-r-0 py-8 bg-black/[0.01] hover:bg-black/[0.04] transition-all duration-500 group/social"
                 >
-                  <span className="font-bold text-[13px] md:text-[14px] text-black/70 tracking-tight uppercase whitespace-nowrap px-4">
-                    {company.logo}
+                  <span className="text-black/30 group-hover/social:text-black/70 transition-colors duration-500">
+                    {social.icon}
                   </span>
-                </div>
+                  <span className="font-bold text-[13px] md:text-[14px] text-black/70 tracking-tight uppercase whitespace-nowrap group-hover/social:text-black transition-colors duration-500">
+                    {social.name}
+                  </span>
+                </a>
               ))}
             </div>
           </div>
@@ -560,6 +581,8 @@ export default function Home() {
                   key={link.name}
                   href={link.href}
                   target={link.href.startsWith("http") ? "_blank" : undefined}
+                  data-cursor-label={link.name.replace(" ↗", "")}
+                  data-cursor-type="social-btn"
                   className="text-[13px] font-medium text-black/30 hover:text-black/80 transition-colors duration-300"
                 >
                   {link.name}

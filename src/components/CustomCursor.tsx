@@ -18,6 +18,7 @@ export default function CustomCursor() {
 
   const [hovered, setHovered] = useState(false);
   const [label, setLabel] = useState("");
+  const [cursorType, setCursorType] = useState<string | null>(null);
   const [isPressed, setIsPressed] = useState(false);
   const [isTouchDevice, setIsTouchDevice] = useState(false);
 
@@ -35,8 +36,10 @@ export default function CustomCursor() {
       if (target) {
         setHovered(true);
         setLabel(target.getAttribute("data-cursor-label") || "");
+        setCursorType(target.getAttribute("data-cursor-type") || null);
       } else {
         setHovered(false);
+        setCursorType(null);
       }
     };
 
@@ -61,7 +64,11 @@ export default function CustomCursor() {
   return (
     <div className="hidden md:block pointer-events-none">
       {/* Crosshair Lines */}
-      <div className="fixed inset-0 pointer-events-none z-[9998]">
+      <motion.div
+        className="fixed inset-0 pointer-events-none z-[9998]"
+        animate={{ opacity: cursorType === "social-btn" ? 0 : 1 }}
+        transition={{ duration: 0.2 }}
+      >
         {/* Horizontal Line */}
         <motion.div
           className="fixed h-[0.5px] pointer-events-none left-0 right-0"
@@ -101,9 +108,9 @@ export default function CustomCursor() {
           className="fixed w-[8px] h-[8px] bg-black/60 bottom-0 -translate-x-1/2"
           style={{ left: smoothX }}
         />
-      </div>
+      </motion.div>
 
-      {/* Hover Label Pill */}
+      {/* Hover Label Pill — default style */}
       <motion.div
         className="fixed top-0 left-0 pointer-events-none z-[9999] flex items-center justify-center transform-gpu"
         style={{
@@ -113,18 +120,21 @@ export default function CustomCursor() {
           translateY: "-50%",
         }}
       >
-        <motion.div
-          animate={{
-            width: hovered ? (label.length > 8 ? 160 : 110) : 0,
-            height: hovered ? 36 : 0,
-            scale: isPressed ? 0.92 : 1,
-            opacity: hovered ? 1 : 0,
-          }}
-          transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
-          className="rounded-none bg-black flex items-center justify-center shadow-2xl overflow-hidden pointer-events-none"
-        >
-          <AnimatePresence mode="wait">
-            {hovered && label && (
+        <AnimatePresence mode="wait">
+          {hovered && label && cursorType !== "social-btn" && (
+            <motion.div
+              key="default-label"
+              initial={{ width: 0, height: 0, opacity: 0 }}
+              animate={{
+                width: label.length > 8 ? 160 : 110,
+                height: 36,
+                scale: isPressed ? 0.92 : 1,
+                opacity: 1,
+              }}
+              exit={{ width: 0, height: 0, opacity: 0 }}
+              transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
+              className="rounded-none bg-black flex items-center justify-center shadow-2xl overflow-hidden pointer-events-none"
+            >
               <motion.span
                 key={label}
                 initial={{ opacity: 0, y: 4 }}
@@ -135,15 +145,66 @@ export default function CustomCursor() {
               >
                 {label}
               </motion.span>
-            )}
-          </AnimatePresence>
-        </motion.div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </motion.div>
 
-      {/* Precision Center "+" */}
+      {/* Social Button Cursor — small button style */}
+      <motion.div
+        className="fixed top-0 left-0 pointer-events-none z-[10001] flex items-center justify-center transform-gpu"
+        style={{
+          x: smoothX,
+          y: smoothY,
+          translateX: "-50%",
+          translateY: "-50%",
+        }}
+      >
+        <AnimatePresence mode="wait">
+          {hovered && label && cursorType === "social-btn" && (
+            <motion.div
+              key="social-btn-label"
+              initial={{ scale: 0.5, opacity: 0 }}
+              animate={{
+                scale: isPressed ? 0.92 : 1,
+                opacity: 1,
+              }}
+              exit={{ scale: 0.5, opacity: 0 }}
+              transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
+              className="bg-black rounded-[4px] flex items-center justify-center shadow-2xl pointer-events-none"
+              style={{
+                paddingTop: "8px",
+                paddingBottom: "8px",
+                paddingLeft: "16px",
+                paddingRight: "16px",
+              }}
+            >
+              <motion.span
+                key={label}
+                initial={{ opacity: 0, y: 4 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -4 }}
+                transition={{ duration: 0.12 }}
+                className="text-[12px] text-white font-semibold tracking-tight whitespace-nowrap leading-none pointer-events-none select-none"
+              >
+                {label}
+              </motion.span>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </motion.div>
+
+      {/* Precision Center "+" — hides on social hover */}
       <motion.div
         animate={{
-          scale: isPressed ? 0.6 : hovered ? 1.5 : 1,
+          scale:
+            cursorType === "social-btn"
+              ? 0
+              : isPressed
+                ? 0.6
+                : hovered
+                  ? 1.5
+                  : 1,
           rotate: hovered ? 45 : 0,
           backgroundColor: hovered ? "rgba(0, 0, 0, 1)" : "rgba(0, 0, 0, 0.6)",
         }}

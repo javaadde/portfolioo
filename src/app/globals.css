@@ -221,3 +221,40 @@ html {
 ::-webkit-scrollbar-thumb:hover {
   background: rgba(0, 0, 0, 0.25);
 }
+
+/* ===== CURSOR BLINK ===== */
+@keyframes blink {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+}
+
+/* ===== CUSTOM CURSOR PILL ===== */
+.cursor-pill {
+  position: fixed;
+  pointer-events: none;
+  z-index: 9999;
+  background: var(--foreground);
+  color: white;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 8px 18px;
+  border-radius: 100px;
+  opacity: 0;
+  transform: translate(-50%, -50%) scale(0.6);
+  transition:
+    opacity 0.25s ease,
+    transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  white-space: nowrap;
+}
+
+.cursor-pill.visible {
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(1);
+}
