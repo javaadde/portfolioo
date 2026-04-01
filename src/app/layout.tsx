@@ -1,23 +1,14 @@
 import type { Metadata } from "next";
-import { Inter, Outfit, JetBrains_Mono } from "next/font/google";
+import { VT323 } from "next/font/google";
 import "./globals.css";
 import NavBar from "@/components/NavBar";
 import CustomCursor from "@/components/CustomCursor";
+import Win2000Taskbar from "@/components/Win2000Taskbar";
 
-const inter = Inter({
-  subsets: ["latin"],
-  weight: ["400", "500", "600"],
-  variable: "--font-inter",
-});
-const outfit = Outfit({
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700", "800", "900"],
-  variable: "--font-outfit",
-});
-const jetbrains = JetBrains_Mono({
+const vt323 = VT323({
   subsets: ["latin"],
   weight: ["400"],
-  variable: "--font-mono",
+  variable: "--font-vt323",
 });
 
 export const metadata: Metadata = {
@@ -40,11 +31,13 @@ export default function RootLayout({
     <html lang="en">
       <body
         suppressHydrationWarning={true}
-        className={`${inter.variable} ${outfit.variable} ${jetbrains.variable} antialiased font-body bg-background cursor-active`}
+        className={`${vt323.variable} antialiased win-desktop`}
+        style={{ fontFamily: '"MS Sans Serif", "Tahoma", "Arial", sans-serif', fontSize: "11px" }}
       >
         <CustomCursor />
         <NavBar />
-        <main className="relative z-[2]">{children}</main>
+        <main className="relative z-[2] pb-8">{children}</main>
+        <Win2000Taskbar />
       </body>
     </html>
   );

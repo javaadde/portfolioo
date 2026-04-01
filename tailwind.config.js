@@ -8,14 +8,19 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        background: "#f1f1f1",
-        foreground: "#1a1a1a",
-        accent: "#006064",
+        background: "#d4d0c8",
+        foreground: "#000000",
+        surface: "#d4d0c8",
+        accent: "#0a246a",
+        "accent-light": "#3a6ea5",
+        "border-light": "#ffffff",
+        "border-dark": "#808080",
+        "border-darker": "#404040",
       },
       fontFamily: {
-        heading: ["var(--font-outfit)", "sans-serif"],
-        body: ["var(--font-inter)", "sans-serif"],
-        mono: ["var(--font-mono)", "monospace"],
+        heading: ["var(--font-vt323)", "monospace"],
+        body: ['"MS Sans Serif"', '"Tahoma"', "Arial", "sans-serif"],
+        mono: ['"Courier New"', "monospace"],
       },
     },
   },
