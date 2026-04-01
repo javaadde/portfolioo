@@ -138,22 +138,6 @@ export default function Home() {
       githubUrl: "https://github.com/devxtra-community/hayon",
       previewImage: hayonPreview,
     },
-    {
-      id: "002",
-      title: "Flux",
-      category: "PRODUCT DESIGN · APP",
-      description:
-        "An AI-powered workflow automation tool that streamlines creative processes, enabling teams to focus on what matters most — building great products.",
-      year: "2024",
-    },
-    {
-      id: "003",
-      title: "Halō",
-      category: "FULL STACK · WEB APP",
-      description:
-        "A modern social platform connecting creators with audiences through immersive storytelling, live sessions, and community-driven content curation.",
-      year: "2024",
-    },
   ];
 
   const socials = [
@@ -176,37 +160,6 @@ export default function Home() {
       name: "Email",
       href: "mailto:javaadde@gmail.com",
       icon: <Mail className="w-4 h-4" />,
-    },
-  ];
-
-  const experiences = [
-    {
-      period: "June - Aug 2025",
-      role: "UX Design Intern",
-      company: "Design Studio UX/UI",
-      description:
-        "Worked across UX audits, user flows, wireframes, UI design, and prototyping to identify usability gaps and improve product clarity.",
-    },
-    {
-      period: "May - June 2025",
-      role: "Product Design Intern",
-      company: "Aeza",
-      description:
-        "Contributed to defining the product's information architecture and core navigation system. Designed key UI surfaces focusing on clarity and scalability.",
-    },
-    {
-      period: "2023 – Now",
-      role: "Full Stack Developer",
-      company: "Freelance",
-      description:
-        "Designed and developed end-to-end web applications for personal brands and companies, aligning user needs with business goals.",
-    },
-    {
-      period: "2020 – 2023",
-      role: "Frontend Developer",
-      company: "Freelance",
-      description:
-        "Created responsive, high-performance websites and interfaces, strengthening my understanding of modern web architecture and visual hierarchy.",
     },
   ];
 
@@ -372,62 +325,69 @@ export default function Home() {
           transition={{ delay: 0.8, duration: 1 }}
           className="hidden border-t border-black/[0.08] md:block"
         >
-          <div className="flex flex-col items-stretch px-4 sm:px-6 md:flex-row md:px-12 lg:px-16">
+          <div className="px-4 sm:px-6 md:px-12 lg:px-16">
+            <div className="relative flex flex-col items-stretch border-y border-black/[0.08] md:flex-row">
+              <span className="corner-plus tl" />
+              <span className="corner-plus tr" />
+              <span className="corner-plus bl" />
+              <span className="corner-plus br" />
+
             {/* Label Cell */}
-            <div className="relative flex items-center border-b border-black/[0.08] py-4 md:w-[25%] md:border-b-0 md:border-r md:py-6 md:pr-8 lg:w-[16.666%]">
-              <div className="relative flex w-full items-end justify-between gap-4 overflow-hidden">
-                <div className="relative z-10 inline-block">
-                  <span className="mb-3 block font-mono text-[9px] uppercase tracking-[0.24em] text-black/20">
-                    Connect
-                  </span>
-                  <span className="font-body text-[14px] text-black/60 leading-tight font-medium">
-                    Find me <br /> on the web @
-                  </span>
-                  <div className="mt-3 flex items-center gap-3">
-                    <span className="font-mono text-[9px] uppercase tracking-[0.22em] text-black/24">
-                      Social Archive
-                    </span>
-                    <span className="h-px w-6 bg-black/[0.1]" />
-                    <span className="font-mono text-[9px] uppercase tracking-[0.22em] text-black/38">
-                      04
+              <div className="relative flex items-center border-b border-black/[0.08] px-4 py-3 md:w-[34%] md:border-b-0 md:border-r md:px-6 lg:w-[28%]">
+                <div className="relative flex w-full items-center justify-between gap-4">
+                  <div className="relative z-10 inline-block">
+                    <span className="font-body text-[12px] text-black/68 leading-tight font-medium">
+                      Find me <br /> on the web @
                     </span>
                   </div>
-                </div>
 
-                <div className="relative z-10 hidden shrink-0 md:block">
-                  <div className="relative flex h-[54px] w-[54px] items-center justify-center border border-black/[0.06] bg-black/[0.015]">
-                    <div className="absolute inset-[8px] border border-dashed border-black/[0.08]" />
-                    <InitialsLogo className="w-[22px] opacity-80" />
+                  <div className="relative z-10 hidden shrink-0 md:block">
+                    <div className="relative flex h-[26px] w-[26px] items-center justify-center border border-black/[0.08] bg-transparent">
+                      <span className="corner-plus tl" />
+                      <span className="corner-plus tr" />
+                      <span className="corner-plus bl" />
+                      <span className="corner-plus br" />
+                      <InitialsLogo className="w-[10px] opacity-75" />
+                    </div>
                   </div>
-                </div>
-
-                <div className="pointer-events-none absolute -right-2 bottom-0 hidden opacity-[0.05] md:block">
-                  <InitialsLogo className="w-[72px]" />
                 </div>
               </div>
-            </div>
-            {/* Social Cells */}
-            <div className="grid flex-1 grid-cols-2 overflow-hidden md:flex md:grid-cols-none">
-              {socials.map((social, i) => (
-                <a
-                  key={i}
-                  href={social.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  data-cursor-label={social.name}
-                  data-cursor-type="social-btn"
-                  className={`flex min-h-[68px] items-center justify-center gap-2 bg-black/[0.01] py-4 transition-all duration-500 group/social hover:bg-black/[0.04] md:min-h-0 md:flex-1 md:border-r md:border-black/[0.08] md:py-6 md:last:border-r-0 ${
-                    i % 2 === 0 ? "border-r border-black/[0.08]" : ""
-                  } ${i < socials.length - 2 ? "border-b border-black/[0.08]" : ""}`}
-                >
-                  <span className="text-black/30 group-hover/social:text-black/70 transition-colors duration-500">
-                    {social.icon}
-                  </span>
-                  <span className="font-bold text-[13px] md:text-[14px] text-black/70 tracking-tight uppercase whitespace-nowrap group-hover/social:text-black transition-colors duration-500">
-                    {social.name}
-                  </span>
-                </a>
-              ))}
+              {/* Social Cells */}
+              <div className="grid flex-1 grid-cols-2 md:ml-auto md:w-[58%] md:flex md:grid-cols-none lg:w-[62%]">
+                {[{ name: "", href: "", icon: null, empty: true }, ...socials].map(
+                  (social, i) => {
+                    const isEmpty = "empty" in social && social.empty;
+
+                    return (
+                      <a
+                        key={i}
+                        href={isEmpty ? undefined : social.href}
+                        target={isEmpty ? undefined : "_blank"}
+                        rel={isEmpty ? undefined : "noopener noreferrer"}
+                        data-cursor-label={isEmpty ? undefined : social.name}
+                        data-cursor-type={isEmpty ? undefined : "social-btn"}
+                        className={`group/social relative flex min-h-[40px] items-center justify-center gap-1.5 bg-black/[0.01] px-2 py-2.5 transition-all duration-500 md:min-h-0 md:flex-1 md:py-3 ${
+                          i % 2 === 0 ? "border-r border-black/[0.08]" : ""
+                        } ${i < socials.length - 1 ? "border-b border-black/[0.08] md:border-b-0" : ""} ${
+                          i !== socials.length ? "md:border-r md:border-black/[0.08]" : ""
+                        }`}
+                        aria-hidden={isEmpty ? true : undefined}
+                      >
+                        {!isEmpty ? (
+                          <>
+                            <span className="text-black/30 transition-colors duration-500 group-hover/social:text-black/70">
+                              {social.icon}
+                            </span>
+                            <span className="font-bold text-[10px] text-black/70 tracking-tight uppercase whitespace-nowrap transition-colors duration-500 group-hover/social:text-black md:text-[11px]">
+                              {social.name}
+                            </span>
+                          </>
+                        ) : null}
+                      </a>
+                    );
+                  },
+                )}
+              </div>
             </div>
           </div>
         </motion.div>
@@ -477,235 +437,58 @@ export default function Home() {
         {/* Project Cards */}
         {projects.map((project, i) => (
           <AnimatedSection key={project.id} delay={i * 0.1}>
-            {project.title === "Hayon" && "previewImage" in project ? (
-              <div className="group relative border-t border-black/[0.05] py-10 sm:py-12 md:py-20">
-                <div className="relative z-10 grid grid-cols-1 gap-6 md:grid-cols-12 md:gap-8">
-                  <div className="md:col-span-2">
-                    <span className="font-mono text-[10px] tracking-[0.3em] text-black/20 block">
-                      [{project.id}]
-                    </span>
-                  </div>
-
-                  <div className="md:col-span-3">
-                    <h3 className="text-[2.2rem] md:text-[3rem] font-bold leading-[0.95] tracking-[-0.05em] text-black/85 font-heading">
-                      <ScrambleText text={`${project.title}.`} />
-                    </h3>
-                  </div>
-
-                  <div className="md:col-span-7">
-                    <p className="max-w-[44rem] font-mono text-[12px] md:text-[15px] leading-[1.55] uppercase tracking-[0.03em] text-black/48">
-                      {project.description}
-                    </p>
-                    <div className="mt-5 flex flex-wrap items-center gap-x-5 gap-y-2">
-                      <a
-                        href={project.liveUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="font-mono text-[10px] uppercase tracking-[0.2em] text-black/35 transition-colors duration-300 hover:text-black"
-                      >
-                        Live Site
-                      </a>
-                      <a
-                        href={project.githubUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="font-mono text-[10px] uppercase tracking-[0.2em] text-black/35 transition-colors duration-300 hover:text-black"
-                      >
-                        GitHub Repo
-                      </a>
-                    </div>
-                  </div>
-                </div>
-
-                <PixelLoadingPreview
-                  src={project.previewImage!}
-                  alt="Hayon project showcase preview"
-                  href={project.liveUrl!}
-                />
-              </div>
-            ) : (
             <div className="group relative cursor-pointer border-t border-black/[0.05] py-10 sm:py-12 md:py-20">
-              {/* Hover background */}
-              <div className="absolute inset-0 bg-black/[0.01] opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
+              <div className="relative z-10 grid grid-cols-1 gap-6 border border-black/[0.05] px-5 py-6 md:grid-cols-12 md:gap-8 md:px-8 md:py-7">
+                <span className="corner-plus tl" />
+                <span className="corner-plus tr" />
+                <span className="corner-plus bl" />
+                <span className="corner-plus br" />
 
-              <div className="relative z-10 flex flex-col gap-8 md:flex-row md:items-start md:gap-16">
-                {/* Left: Number & Title */}
-                <div className="flex-shrink-0 md:w-[45%]">
-                  <span className="font-mono text-[10px] tracking-[0.3em] text-black/20 block mb-4">
+                <div className="md:col-span-2">
+                  <span className="font-mono text-[10px] tracking-[0.3em] text-black/20 block">
                     [{project.id}]
                   </span>
-                  <h3 className="text-[clamp(2.9rem,18vw,5rem)] md:text-7xl lg:text-8xl font-black leading-[0.85] tracking-[-0.05em] uppercase text-black/85 group-hover:text-black transition-colors duration-500">
-                    <ScrambleText text={project.title} />
-                  </h3>
-                  <span className="font-mono text-[10px] tracking-[0.2em] text-black/25 uppercase block mt-4">
-                    {project.category}
-                  </span>
                 </div>
 
-                {/* Right: Description & Arrow */}
-                <div className="flex flex-1 flex-col justify-between gap-6 md:min-h-[160px]">
-                  <p className="max-w-[34rem] font-mono text-[13px] leading-relaxed text-black/40 sm:text-[14px] md:text-[15px]">
+                <div className="md:col-span-3">
+                  <h3 className="text-[1.8rem] md:text-[2.3rem] font-semibold leading-[0.95] tracking-[-0.04em] text-black/85 font-heading">
+                    <ScrambleText text={`${project.title}.`} />
+                  </h3>
+                </div>
+
+                <div className="md:col-span-7">
+                  <p className="max-w-[40rem] font-mono text-[11px] md:text-[13px] leading-[1.5] uppercase tracking-[0.03em] text-black/48">
                     {project.description}
                   </p>
-                  <div className="mt-2 flex flex-col gap-4 md:mt-8 md:flex-row md:items-center md:justify-between">
-                    <div className="flex items-center gap-4">
-                      <span className="font-mono text-[10px] text-black/20 italic">
-                        {project.year}
-                      </span>
-                      {"liveUrl" in project && project.liveUrl ? (
-                        <div className="flex items-center gap-3">
-                          <a
-                            href={project.liveUrl}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="font-mono text-[10px] uppercase tracking-[0.18em] text-black/35 transition-colors duration-300 hover:text-black"
-                          >
-                            Live
-                          </a>
-                          {"githubUrl" in project && project.githubUrl ? (
-                            <a
-                              href={project.githubUrl}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="font-mono text-[10px] uppercase tracking-[0.18em] text-black/35 transition-colors duration-300 hover:text-black"
-                            >
-                              GitHub
-                            </a>
-                          ) : null}
-                        </div>
-                      ) : null}
-                    </div>
+                  <div className="mt-4 flex flex-wrap items-center gap-x-5 gap-y-2">
                     <a
-                      href={"liveUrl" in project && project.liveUrl ? project.liveUrl : "#"}
-                      target={"liveUrl" in project && project.liveUrl ? "_blank" : undefined}
-                      rel={
-                        "liveUrl" in project && project.liveUrl
-                          ? "noopener noreferrer"
-                          : undefined
-                      }
-                      className="flex h-12 w-12 items-center justify-center rounded-full border border-black/[0.08] transition-all duration-500 group-hover:border-black group-hover:bg-black md:h-14 md:w-14"
+                      href={project.liveUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="font-mono text-[10px] uppercase tracking-[0.2em] text-black/35 transition-colors duration-300 hover:text-black"
                     >
-                      <ArrowUpRight className="h-5 w-5 text-black/30 transition-all duration-500 group-hover:-rotate-12 group-hover:text-white md:h-6 md:w-6" />
+                      Live Site
+                    </a>
+                    <a
+                      href={project.githubUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="font-mono text-[10px] uppercase tracking-[0.2em] text-black/35 transition-colors duration-300 hover:text-black"
+                    >
+                      GitHub Repo
                     </a>
                   </div>
                 </div>
               </div>
+
+              <PixelLoadingPreview
+                src={project.previewImage!}
+                alt="Hayon project showcase preview"
+                href={project.liveUrl!}
+              />
             </div>
-            )}
           </AnimatedSection>
         ))}
-      </section>
-
-      {/* ═══════════════════ EXPERIENCE SECTION ═══════════════════ */}
-      <section
-        id="experience"
-        className="relative z-10 px-4 sm:px-6 md:px-12 lg:px-16 py-20 md:py-40"
-      >
-        <div className="section-divider mb-16" />
-
-        <AnimatedSection>
-          <div className="flex flex-col gap-12 md:flex-row md:gap-32">
-            {/* Left Column */}
-            <div className="md:w-[35%]">
-              <span className="font-mono text-[10px] tracking-[0.3em] uppercase text-black/20 block mb-3">
-                [Experience]
-              </span>
-              <h2 className="text-3xl md:text-4xl font-bold tracking-[-0.03em] text-black/80 font-heading mb-8">
-                Experience
-              </h2>
-              <Link
-                href="#"
-                className="group inline-flex items-center gap-3 text-[13px] font-semibold text-black/60 hover:text-accent transition-colors duration-300"
-              >
-                Download CV
-                <span className="w-8 h-8 rounded-full border border-black/10 flex items-center justify-center group-hover:bg-accent group-hover:border-accent transition-all duration-300">
-                  <ArrowUpRight className="w-3.5 h-3.5 group-hover:text-white transition-colors" />
-                </span>
-              </Link>
-            </div>
-
-            {/* Right Column - Timeline */}
-            <div className="flex-1 flex flex-col gap-0">
-              {experiences.map((exp, i) => (
-                <AnimatedSection key={i} delay={i * 0.1}>
-                  <div className="group border-t border-black/[0.05] px-0 py-8 transition-colors duration-500 hover:bg-black/[0.01] md:-mx-4 md:px-4 md:py-10">
-                    <div className="flex flex-col gap-3 md:flex-row md:items-start md:gap-8">
-                      <span className="font-mono text-[11px] tracking-wide text-black/25 md:min-w-[140px] flex-shrink-0">
-                        {exp.period}
-                      </span>
-                      <div className="flex-1">
-                        <h4 className="text-lg md:text-xl font-bold tracking-tight text-black/80 mb-1">
-                          {exp.role}
-                        </h4>
-                        <span className="text-[13px] font-medium text-accent/80 block mb-3">
-                          {exp.company}
-                        </span>
-                        <p className="text-[13px] leading-relaxed text-black/35 max-w-[460px]">
-                          {exp.description}
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                </AnimatedSection>
-              ))}
-            </div>
-          </div>
-        </AnimatedSection>
-      </section>
-
-      {/* ═══════════════════ SIDE QUESTS / ART SECTION ═══════════════════ */}
-      <section
-        id="sidequests"
-        className="relative z-10 px-4 sm:px-6 md:px-12 lg:px-16 py-20 md:py-32"
-      >
-        <div className="section-divider mb-16" />
-
-        <AnimatedSection>
-          <div className="flex flex-col md:flex-row gap-8 md:gap-16 mb-12">
-            <div>
-              <span className="font-mono text-[10px] tracking-[0.3em] uppercase text-black/20 block mb-3">
-                [000]
-              </span>
-              <h2 className="text-3xl md:text-4xl font-bold tracking-[-0.03em] text-black/80 font-heading">
-                SideQuests ↗
-              </h2>
-            </div>
-            <p className="text-[14px] leading-relaxed text-black/35 max-w-[400px] md:pt-6">
-              I&apos;ve always been drawn to both art and technology. While
-              development is my craft, design is something I still return to —
-              simply to explore and create.
-            </p>
-          </div>
-        </AnimatedSection>
-
-        {/* Art Grid */}
-        <div className="grid grid-cols-2 gap-4 md:grid-cols-4 md:gap-6">
-          {[
-            { name: "Modern Dashboard", color: "#1a1a2e" },
-            { name: "API Architecture", color: "#16213e" },
-            { name: "Mobile Interface", color: "#0f3460" },
-            { name: "Design System", color: "#1a1a2e" },
-          ].map((item, i) => (
-            <AnimatedSection key={i} delay={i * 0.1}>
-              <div className="group relative aspect-[3/4] overflow-hidden bg-gradient-to-br from-black/[0.03] to-black/[0.06] border border-black/[0.04]">
-                <div
-                  className="absolute inset-0 opacity-10 group-hover:opacity-25 transition-opacity duration-700"
-                  style={{
-                    background: `linear-gradient(135deg, ${item.color}, transparent)`,
-                  }}
-                />
-                <div className="absolute bottom-0 left-0 right-0 p-4">
-                  <span className="text-[11px] font-bold tracking-tight text-black/50 block">
-                    {item.name}
-                  </span>
-                  <span className="font-mono text-[9px] text-black/20">
-                    12 x 6 inch · 2024
-                  </span>
-                </div>
-              </div>
-            </AnimatedSection>
-          ))}
-        </div>
       </section>
 
       {/* ═══════════════════ FOOTER ═══════════════════ */}

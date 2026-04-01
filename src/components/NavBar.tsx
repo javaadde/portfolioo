@@ -8,9 +8,7 @@ import InitialsLogo from "@/components/InitialsLogo";
 
 const navLinks = [
   { name: "About", href: "/about" },
-  { name: "Experience", href: "/#experience" },
   { name: "LinkedIn", href: "https://linkedin.com/in/javaadde" },
-  { name: "SideQuests", href: "/#sidequests" },
 ];
 
 const NavBar = () => {

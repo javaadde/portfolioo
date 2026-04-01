@@ -251,6 +251,57 @@ html {
   right: -13px;
 }
 
+.corner-plus {
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  pointer-events: none;
+  opacity: 0.58;
+}
+
+.corner-plus::before,
+.corner-plus::after {
+  content: "";
+  position: absolute;
+  background: rgba(0, 0, 0, 0.42);
+}
+
+.corner-plus::before {
+  left: 50%;
+  top: 0;
+  width: 1.5px;
+  height: 100%;
+  transform: translateX(-50%);
+}
+
+.corner-plus::after {
+  top: 50%;
+  left: 0;
+  width: 100%;
+  height: 1.5px;
+  transform: translateY(-50%);
+}
+
+.corner-plus.tl {
+  top: -8px;
+  left: -8px;
+}
+
+.corner-plus.tr {
+  top: -8px;
+  right: -8px;
+}
+
+.corner-plus.bl {
+  bottom: -8px;
+  left: -8px;
+}
+
+.corner-plus.br {
+  bottom: -8px;
+  right: -8px;
+}
+
 /* ===== PAGE FRAME ===== */
 .page-frame {
   @apply fixed inset-4 md:inset-8 border border-black/[0.06] pointer-events-none z-50;
