@@ -24,6 +24,11 @@ export const metadata: Metadata = {
   title: "Javad | Full Stack Developer",
   description:
     "Full-stack developer focused on solving real problems through clean architecture, systems thinking, and modern web technologies.",
+  icons: {
+    icon: "/icon.svg",
+    shortcut: "/icon.svg",
+    apple: "/icon.svg",
+  },
 };
 
 export default function RootLayout({

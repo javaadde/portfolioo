@@ -6,6 +6,7 @@ import {
   useSpring,
   useMotionValue,
   AnimatePresence,
+  useTransform,
 } from "framer-motion";
 
 export default function CustomCursor() {
@@ -15,6 +16,8 @@ export default function CustomCursor() {
   const springConfig = { damping: 30, stiffness: 350, mass: 0.6 };
   const smoothX = useSpring(mouseX, springConfig);
   const smoothY = useSpring(mouseY, springConfig);
+  const snappedX = useTransform(smoothX, (value) => Math.round(value));
+  const snappedY = useTransform(smoothY, (value) => Math.round(value));
 
   const [hovered, setHovered] = useState(false);
   const [label, setLabel] = useState("");
@@ -66,47 +69,47 @@ export default function CustomCursor() {
       {/* Crosshair Lines */}
       <motion.div
         className="fixed inset-0 pointer-events-none z-[9998]"
-        animate={{ opacity: cursorType === "social-btn" ? 0 : 1 }}
+        animate={{ opacity: 1 }}
         transition={{ duration: 0.2 }}
       >
         {/* Horizontal Line */}
         <motion.div
-          className="fixed h-[0.5px] pointer-events-none left-0 right-0"
+          className="fixed left-0 right-0 h-px pointer-events-none"
           style={{
-            top: smoothY,
+            top: snappedY,
             background:
-              "linear-gradient(to right, transparent 2%, rgba(0,0,0,0.3) 15%, rgba(0,0,0,0.3) 85%, transparent 98%)",
+              "linear-gradient(to right, transparent 2%, rgba(0,0,0,0.36) 15%, rgba(0,0,0,0.36) 85%, transparent 98%)",
           }}
         />
         {/* Vertical Line */}
         <motion.div
-          className="fixed w-[0.5px] pointer-events-none top-0 bottom-0"
+          className="fixed top-0 bottom-0 w-px pointer-events-none"
           style={{
-            left: smoothX,
+            left: snappedX,
             background:
-              "linear-gradient(to bottom, transparent 2%, rgba(0,0,0,0.3) 10%, rgba(0,0,0,0.3) 90%, transparent 98%)",
+              "linear-gradient(to bottom, transparent 2%, rgba(0,0,0,0.36) 10%, rgba(0,0,0,0.36) 90%, transparent 98%)",
           }}
         />
 
         {/* End Squares — Left */}
         <motion.div
           className="fixed w-[8px] h-[8px] bg-black/60 left-0 -translate-y-1/2"
-          style={{ top: smoothY }}
+          style={{ top: snappedY }}
         />
         {/* End Squares — Right */}
         <motion.div
           className="fixed w-[8px] h-[8px] bg-black/60 right-0 -translate-y-1/2"
-          style={{ top: smoothY }}
+          style={{ top: snappedY }}
         />
         {/* End Squares — Top */}
         <motion.div
           className="fixed w-[8px] h-[8px] bg-black/60 top-0 -translate-x-1/2"
-          style={{ left: smoothX }}
+          style={{ left: snappedX }}
         />
         {/* End Squares — Bottom */}
         <motion.div
           className="fixed w-[8px] h-[8px] bg-black/60 bottom-0 -translate-x-1/2"
-          style={{ left: smoothX }}
+          style={{ left: snappedX }}
         />
       </motion.div>
 
@@ -171,7 +174,7 @@ export default function CustomCursor() {
               }}
               exit={{ scale: 0.5, opacity: 0 }}
               transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
-              className="bg-black rounded-[4px] flex items-center justify-center shadow-2xl pointer-events-none"
+              className="bg-black rounded-none flex items-center justify-center shadow-2xl pointer-events-none"
               style={{
                 paddingTop: "8px",
                 paddingBottom: "8px",

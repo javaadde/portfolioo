@@ -199,6 +199,58 @@ html {
   text-transform: uppercase;
 }
 
+/* ===== CORNER CROSS MARKERS ===== */
+.corner-cross {
+  position: absolute;
+  width: 24px;
+  height: 24px;
+  pointer-events: none;
+  opacity: 0.45;
+}
+
+.corner-cross::before,
+.corner-cross::after {
+  content: "";
+  position: absolute;
+  background: rgba(0, 0, 0, 0.28);
+}
+
+.corner-cross::before {
+  left: 50%;
+  top: 0;
+  width: 1.5px;
+  height: 100%;
+  transform: translateX(-50%);
+}
+
+.corner-cross::after {
+  top: 50%;
+  left: 0;
+  width: 100%;
+  height: 1.5px;
+  transform: translateY(-50%);
+}
+
+.corner-cross.tl {
+  top: -13px;
+  left: -13px;
+}
+
+.corner-cross.tr {
+  top: -13px;
+  right: -13px;
+}
+
+.corner-cross.bl {
+  bottom: -13px;
+  left: -13px;
+}
+
+.corner-cross.br {
+  bottom: -13px;
+  right: -13px;
+}
+
 /* ===== PAGE FRAME ===== */
 .page-frame {
   @apply fixed inset-4 md:inset-8 border border-black/[0.06] pointer-events-none z-50;
@@ -257,4 +309,19 @@ html {
 .cursor-pill.visible {
   opacity: 1;
   transform: translate(-50%, -50%) scale(1);
+}
+
+@media (max-width: 767px) {
+  .grid-background {
+    background-size: 25% 100%;
+  }
+
+  .connect-btn {
+    padding: 14px 20px;
+  }
+
+  .footer-cta {
+    font-size: clamp(2.75rem, 14vw, 5rem);
+    line-height: 0.92;
+  }
 }

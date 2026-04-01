@@ -15,21 +15,21 @@ export interface Project {
 export const projects: Project[] = [
     {
         id: 1,
-        name: "JD Fashion Store",
-        slug: "jd-fashion-store",
-        category: "E-commerce",
-        rating: "5.0",
-        image: "/projects/e-commerce.png",
-        description: "A modern e-commerce platform for fashion retail with seamless shopping experience, secure payments, and inventory management.",
-        technologies: ["React.js", "JavaScript", "Tailwind CSS", "MongoDB"],
-        githubUrl: "https://github.com/javaadde",
-        demoUrl: "/#",
+        name: "Hayon",
+        slug: "hayon",
+        category: "Social Media Platform",
+        rating: "9.4",
+        image: "/abstract_tech.png",
+        description: "An all-in-one social media planning platform that helps teams think, plan, and publish content from one streamlined workspace.",
+        technologies: ["Web App", "Responsive UI", "Content Planning", "Publishing Flow"],
+        githubUrl: "https://github.com/devxtra-community/hayon",
+        demoUrl: "https://hayon.site",
         features: [
-            "Secure payment integration with Stripe",
-            "Real-time inventory management",
-            "User authentication and profiles",
-            "Shopping cart and wishlist",
-            "Responsive design for all devices"
+            "Unified social media planning workflow",
+            "Clean mobile-first landing experience",
+            "Streamlined content organization",
+            "Publishing-focused interface design",
+            "Responsive layout across devices"
         ]
     },
     {
