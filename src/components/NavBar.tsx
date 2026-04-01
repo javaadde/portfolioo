@@ -2,110 +2,125 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { motion, AnimatePresence } from "framer-motion";
-import { ArrowUpRight } from "lucide-react";
-import InitialsLogo from "@/components/InitialsLogo";
+import { AnimatePresence, motion } from "framer-motion";
 
 const navLinks = [
-  { name: "About", href: "/about" },
-  { name: "LinkedIn", href: "https://linkedin.com/in/javaadde" },
+  { name: "File", items: [{ label: "Home", href: "/" }, { label: "About", href: "/about" }, { label: "separator" }, { label: "Exit", href: "#" }] },
+  { name: "View", items: [{ label: "Projects", href: "/projects" }, { label: "Contact", href: "/contact" }] },
+  { name: "Help", items: [{ label: "GitHub", href: "https://github.com/javaadde", ext: true }, { label: "LinkedIn", href: "https://linkedin.com/in/javaadde", ext: true }] },
 ];
 
 const NavBar = () => {
-  const [scrolled, setScrolled] = useState(false);
+  const [activeMenu, setActiveMenu] = useState<string | null>(null);
   const [mobileOpen, setMobileOpen] = useState(false);
 
   useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 24);
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
-
-  useEffect(() => {
-    document.body.style.overflow = mobileOpen ? "hidden" : "";
-
-    return () => {
-      document.body.style.overflow = "";
-    };
-  }, [mobileOpen]);
-
-  useEffect(() => {
-    const handleResize = () => {
-      if (window.innerWidth >= 768) {
-        setMobileOpen(false);
-      }
-    };
-
-    window.addEventListener("resize", handleResize, { passive: true });
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
+    const close = () => setActiveMenu(null);
+    if (activeMenu) document.addEventListener("click", close);
+    return () => document.removeEventListener("click", close);
+  }, [activeMenu]);
 
   return (
     <>
-      <nav
-        className={`fixed top-0 left-0 z-[1000] flex w-full items-center justify-between px-4 py-3 transition-all duration-500 sm:px-6 md:px-12 lg:px-16 ${
-          scrolled
-            ? "border-b border-black/[0.04] bg-[#f4f3ef]/85 py-2.5 backdrop-blur-xl"
-            : "border-b border-black/[0.05] bg-[#f4f3ef]/96 md:border-b-0 md:bg-transparent"
-        }`}
+      {/* Window chrome wrapper — fixed at top */}
+      <div
+        className="fixed top-0 left-0 z-[1000] w-full"
+        style={{ padding: "8px 8px 0 8px" }}
       >
-        {/* Logo */}
-        <Link href="/" className="relative z-[1001]">
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.8 }}
-            className="w-[42px]"
-          >
-            <InitialsLogo />
-          </motion.div>
-        </Link>
+        <div className="win-window" style={{ maxWidth: "100%" }}>
+          {/* Title Bar */}
+          <div className="win-titlebar">
+            <div className="flex items-center gap-1.5">
+              {/* App icon */}
+              <svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true" style={{ flexShrink: 0 }}>
+                <rect x="0" y="0" width="6" height="6" fill="#f00" />
+                <rect x="8" y="0" width="6" height="6" fill="#0a0" />
+                <rect x="0" y="8" width="6" height="6" fill="#00f" />
+                <rect x="8" y="8" width="6" height="6" fill="#ff0" />
+              </svg>
+              <span style={{ fontFamily: '"MS Sans Serif", "Tahoma", sans-serif', fontSize: 11, fontWeight: "bold" }}>
+                Javad.dev — Portfolio — [Full Stack Developer]
+              </span>
+            </div>
+            {/* Window control buttons */}
+            <div className="flex items-center gap-0.5">
+              <button className="win-titlebar-btn" aria-label="Minimize" title="Minimize">
+                <span style={{ fontSize: 9, lineHeight: 1, marginTop: 4, display: "block" }}>_</span>
+              </button>
+              <button className="win-titlebar-btn" aria-label="Maximize" title="Maximize">
+                <span style={{ fontSize: 9, lineHeight: 1, border: "1px solid #000", width: 8, height: 8, display: "block" }} />
+              </button>
+              <button className="win-titlebar-btn" aria-label="Close" title="Close" style={{ fontWeight: "bold", fontSize: 11 }}>
+                ✕
+              </button>
+            </div>
+          </div>
 
-        {/* Desktop Nav */}
-        <div className="hidden md:flex items-center gap-8">
-          {navLinks.map((item, i) => (
-            <motion.div
-              key={item.name}
-              initial={{ opacity: 0, y: -10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.1 * i, duration: 0.5 }}
-            >
-              <Link
-                href={item.href}
-                target={item.href.startsWith("http") ? "_blank" : undefined}
-                className="group flex items-center gap-1.5 text-[11px] font-bold tracking-tight text-[#1a1a1a]/40 hover:text-[#1a1a1a] transition-all duration-300 uppercase"
-              >
-                {item.name}
-                <ArrowUpRight className="w-2.5 h-2.5 opacity-30 group-hover:opacity-100 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all duration-300" />
-              </Link>
-            </motion.div>
-          ))}
+          {/* Menu Bar */}
+          <div className="win-menubar" role="menubar">
+            {navLinks.map((menu) => (
+              <div key={menu.name} className="relative">
+                <button
+                  role="menuitem"
+                  aria-haspopup="true"
+                  aria-expanded={activeMenu === menu.name}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setActiveMenu(activeMenu === menu.name ? null : menu.name);
+                  }}
+                  className="win-menuitem"
+                >
+                  <u>{menu.name[0]}</u>{menu.name.slice(1)}
+                </button>
+                <AnimatePresence>
+                  {activeMenu === menu.name && (
+                    <motion.div
+                      initial={{ opacity: 0, y: -2 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -2 }}
+                      transition={{ duration: 0.05 }}
+                      className="win-window absolute left-0 top-full z-[2000]"
+                      style={{ minWidth: 160 }}
+                      role="menu"
+                      onClick={(e) => e.stopPropagation()}
+                    >
+                      {menu.items.map((item, i) => {
+                        if ("label" in item && item.label === "separator") {
+                          return <div key={i} className="section-divider mx-1 my-0.5" />;
+                        }
+                        return (
+                          <Link
+                            key={i}
+                            href={"href" in item ? item.href : "#"}
+                            target={"ext" in item && item.ext ? "_blank" : undefined}
+                            rel={"ext" in item && item.ext ? "noopener noreferrer" : undefined}
+                            role="menuitem"
+                            onClick={() => setActiveMenu(null)}
+                            className="flex items-center px-6 py-0.5 hover:bg-[#0a246a] hover:text-white"
+                            style={{ fontFamily: '"MS Sans Serif","Tahoma",sans-serif', fontSize: 11, color: "inherit", whiteSpace: "nowrap" }}
+                          >
+                            {"label" in item ? item.label : ""}
+                          </Link>
+                        );
+                      })}
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
+            ))}
 
-          <motion.div
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.5, duration: 0.5 }}
-          >
+            <div className="flex-1" />
+
             <Link
               href="mailto:javaadde@gmail.com"
-              className="bg-accent text-white text-[10px] font-bold tracking-[0.15em] uppercase px-4 py-2 transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] relative overflow-hidden flex items-center gap-1.5 "
+              className="win-menuitem"
+              style={{ fontFamily: '"MS Sans Serif","Tahoma",sans-serif', fontSize: 11, color: "inherit", padding: "3px 10px" }}
             >
-              LET&apos;S CONNECT
-              <ArrowUpRight className="w-3 h-3 opacity-70" />
+              Contact Me
             </Link>
-          </motion.div>
+          </div>
         </div>
-
-        {/* Mobile Menu Toggle */}
-        <button
-          onClick={() => setMobileOpen(!mobileOpen)}
-          className="relative z-[1001] text-[13px] font-semibold tracking-tight text-black md:hidden"
-          aria-expanded={mobileOpen}
-          aria-label={mobileOpen ? "Close menu" : "Open menu"}
-        >
-          {mobileOpen ? "Close" : "Menu"}
-        </button>
-      </nav>
+      </div>
 
       {/* Mobile Menu */}
       <AnimatePresence>
@@ -114,57 +129,23 @@ const NavBar = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[999] flex flex-col bg-[#f4f3ef]/98 px-4 pb-8 pt-24 backdrop-blur-xl sm:px-6"
+            className="fixed inset-0 z-[999] win-window p-4 pt-24"
           >
-            <div className="mb-8">
-              <span className="font-mono text-[10px] tracking-[0.3em] uppercase text-black/20">
-                Navigate
-              </span>
-            </div>
-
-            <div className="flex-1 border-t border-black/[0.06]">
-              {navLinks.map((item, index) => (
-                <motion.div
-                  key={item.name}
-                  initial={{ opacity: 0, y: 24 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: 16 }}
-                  transition={{ delay: 0.06 * index, duration: 0.45 }}
-                >
-                  <Link
-                    href={item.href}
-                    target={item.href.startsWith("http") ? "_blank" : undefined}
-                    onClick={() => setMobileOpen(false)}
-                    className="flex items-center justify-between border-b border-black/[0.06] py-5"
-                  >
-                    <span className="text-[clamp(2rem,10vw,3.25rem)] font-black tracking-[-0.05em] text-black/85">
-                      {item.name}
-                    </span>
-                    <ArrowUpRight className="h-5 w-5 text-black/35" />
-                  </Link>
-                </motion.div>
-              ))}
-            </div>
-
-            <div className="flex flex-col gap-5 pt-8">
-              <div className="flex items-start justify-between gap-4 border-t border-black/[0.06] pt-5">
-                <span className="max-w-[13rem] text-[13px] leading-relaxed text-black/45">
-                  Full-stack developer building sharp interfaces and resilient
-                  products.
-                </span>
-                <span className="font-mono text-[10px] tracking-[0.25em] uppercase text-black/20">
-                  Kochi, IN
-                </span>
-              </div>
-
-              <Link
-                href="mailto:javaadde@gmail.com"
-                onClick={() => setMobileOpen(false)}
-                className="connect-btn flex items-center justify-between"
-              >
-                LET&apos;S CONNECT
-                <ArrowUpRight className="h-4 w-4" />
-              </Link>
+            <div className="flex flex-col gap-2">
+              {navLinks.flatMap((menu) =>
+                menu.items
+                  .filter((i) => "label" in i && i.label !== "separator")
+                  .map((item, j) => (
+                    <Link
+                      key={`${menu.name}-${j}`}
+                      href={"href" in item ? item.href : "#"}
+                      onClick={() => setMobileOpen(false)}
+                      className="win-btn text-left"
+                    >
+                      {"label" in item ? item.label : ""}
+                    </Link>
+                  ))
+              )}
             </div>
           </motion.div>
         )}
