@@ -14,7 +14,10 @@ import { ScrambleText } from "@/components/ScrambleText";
 import PixelLoadingPreview from "@/components/PixelLoadingPreview";
 import InitialsLogo from "@/components/InitialsLogo";
 import Link from "next/link";
-import hayonPreview from "@/assets/project-images/hayon.png";
+import projectOnePreview from "@/assets/project-images/project-1.png";
+import projectTwoPreview from "@/assets/project-images/project-2.png";
+import projectThreePreview from "@/assets/project-images/project-3.png";
+import projectFourPreview from "@/assets/project-images/project-4.png";
 
 /* ────────────── ANIMATED SECTION WRAPPER ────────────── */
 function AnimatedSection({
@@ -128,15 +131,40 @@ export default function Home() {
   /* ── DATA ── */
   const projects = [
     {
-      id: "001",
+      id: "002",
       title: "Hayon",
-      category: "SOCIAL MEDIA · WEB APP",
+      category: "WEB APP · INTERFACE",
       description:
         "An all-in-one social media planning platform built to help teams think, plan, and post from one clean workspace with a fast mobile-first experience.",
       year: "2026",
       liveUrl: "https://hayon.site",
       githubUrl: "https://github.com/devxtra-community/hayon",
-      previewImage: hayonPreview,
+
+      previewImage: projectOnePreview,
+    },
+    {
+      id: "003",
+      title: "Project 03",
+      category: "WEB APP · INTERFACE",
+      description: "Name, description, and project details coming soon.",
+      year: "2026",
+      previewImage: projectTwoPreview,
+    },
+    {
+      id: "004",
+      title: "Project 04",
+      category: "WEB APP · INTERFACE",
+      description: "Name, description, and project details coming soon.",
+      year: "2026",
+      previewImage: projectThreePreview,
+    },
+    {
+      id: "005",
+      title: "Project 05",
+      category: "WEB APP · INTERFACE",
+      description: "Name, description, and project details coming soon.",
+      year: "2026",
+      previewImage: projectFourPreview,
     },
   ];
 
@@ -438,7 +466,7 @@ export default function Home() {
         {projects.map((project, i) => (
           <AnimatedSection key={project.id} delay={i * 0.1}>
             <div className="group relative cursor-pointer border-t border-black/[0.05] py-10 sm:py-12 md:py-20">
-              <div className="relative z-10 grid grid-cols-1 gap-6 border border-black/[0.05] px-5 py-6 md:grid-cols-12 md:gap-8 md:px-8 md:py-7">
+              <div className="relative z-10 grid grid-cols-1 gap-5 border border-black/[0.05] px-5 py-6 md:grid-cols-12 md:items-start md:gap-x-10 md:gap-y-4 md:px-8 md:py-7 lg:gap-x-14">
                 <span className="corner-plus tl" />
                 <span className="corner-plus tr" />
                 <span className="corner-plus bl" />
@@ -450,41 +478,50 @@ export default function Home() {
                   </span>
                 </div>
 
-                <div className="md:col-span-3">
-                  <h3 className="text-[1.8rem] md:text-[2.3rem] font-semibold leading-[0.95] tracking-[-0.04em] text-black/85 font-heading">
+                <div className="md:col-span-4">
+                  <h3 className="max-w-[13ch] text-[1.8rem] font-semibold leading-[0.98] tracking-tight text-black/85 font-heading md:text-[clamp(1.85rem,3vw,2.45rem)]">
                     <ScrambleText text={`${project.title}.`} />
                   </h3>
+                  <span className="mt-3 block font-mono text-[9px] uppercase tracking-[0.22em] text-black/25">
+                    {project.category} · {project.year}
+                  </span>
                 </div>
 
-                <div className="md:col-span-7">
-                  <p className="max-w-[40rem] font-mono text-[11px] md:text-[13px] leading-[1.5] uppercase tracking-[0.03em] text-black/48">
+                <div className="md:col-span-6">
+                  <p className="max-w-[34rem] font-mono text-[11px] leading-[1.65] uppercase tracking-[0.04em] text-black/48 md:text-[12px]">
                     {project.description}
                   </p>
-                  <div className="mt-4 flex flex-wrap items-center gap-x-5 gap-y-2">
-                    <a
-                      href={project.liveUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="font-mono text-[10px] uppercase tracking-[0.2em] text-black/35 transition-colors duration-300 hover:text-black"
-                    >
-                      Live Site
-                    </a>
-                    <a
-                      href={project.githubUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="font-mono text-[10px] uppercase tracking-[0.2em] text-black/35 transition-colors duration-300 hover:text-black"
-                    >
-                      GitHub Repo
-                    </a>
-                  </div>
+                  {project.liveUrl || project.githubUrl ? (
+                    <div className="mt-4 flex flex-wrap items-center gap-x-5 gap-y-2">
+                      {project.liveUrl ? (
+                        <a
+                          href={project.liveUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="font-mono text-[10px] uppercase tracking-[0.2em] text-black/35 transition-colors duration-300 hover:text-black"
+                        >
+                          Live Site
+                        </a>
+                      ) : null}
+                      {project.githubUrl ? (
+                        <a
+                          href={project.githubUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="font-mono text-[10px] uppercase tracking-[0.2em] text-black/35 transition-colors duration-300 hover:text-black"
+                        >
+                          GitHub Repo
+                        </a>
+                      ) : null}
+                    </div>
+                  ) : null}
                 </div>
               </div>
 
               <PixelLoadingPreview
                 src={project.previewImage!}
-                alt="Hayon project showcase preview"
-                href={project.liveUrl!}
+                alt={`${project.title} project showcase preview`}
+                href={project.liveUrl}
               />
             </div>
           </AnimatedSection>

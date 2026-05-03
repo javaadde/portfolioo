@@ -7,19 +7,13 @@ import Image, { type StaticImageData } from "next/image";
 type PixelLoadingPreviewProps = {
   src: StaticImageData;
   alt: string;
-  href: string;
+  href?: string;
 };
 
-const LOAD_DURATION_MS = 3000;
-const TARGET_PIXEL_SIZE = 20;
-const PIXEL_PALETTE = [
-  "#eef0eb",
-  "#d9ded9",
-  "#c1cdc6",
-  "#afc4c5",
-  "#7aa98f",
-  "#54755d",
-];
+const LOAD_DURATION_MS = 2200;
+const TARGET_PIXEL_SIZE = 46;
+const MOBILE_PIXEL_SIZE = 34;
+const PROGRESS_TICK_MS = 32;
 
 function createPixelOrder(columns: number, rows: number) {
   const count = columns * rows;
@@ -36,7 +30,6 @@ function createPixelOrder(columns: number, rows: number) {
         count <= 1
           ? 0
           : ((index * 37 + row * 19 + column * 11) % count) / (count - 1),
-      color: PIXEL_PALETTE[(index + row + column) % PIXEL_PALETTE.length],
     };
   }).sort((left, right) => left.delay - right.delay);
 }
@@ -50,13 +43,13 @@ export default function PixelLoadingPreview({
   const imageFrameRef = useRef<HTMLDivElement | null>(null);
   const inView = useInView(previewRef, { once: true, margin: "-10% 0px" });
   const [progress, setProgress] = useState(0);
-  const [started, setStarted] = useState(false);
   const [grid, setGrid] = useState({ columns: 24, rows: 14 });
 
   const pixelOrder = useMemo(
     () => createPixelOrder(grid.columns, grid.rows),
     [grid.columns, grid.rows],
   );
+  const imageUrl = src.src;
 
   useEffect(() => {
     const element = imageFrameRef.current;
@@ -66,10 +59,10 @@ export default function PixelLoadingPreview({
       const { width, height } = element.getBoundingClientRect();
       if (!width || !height) return;
 
-      const targetSize = width < 640 ? 18 : TARGET_PIXEL_SIZE;
+      const targetSize = width < 640 ? MOBILE_PIXEL_SIZE : TARGET_PIXEL_SIZE;
       const columns = Math.max(12, Math.round(width / targetSize));
       const squareSize = width / columns;
-      const rows = Math.max(8, Math.round(height / squareSize));
+      const rows = Math.max(6, Math.round(height / squareSize));
 
       setGrid((current) =>
         current.columns === columns && current.rows === rows
@@ -87,39 +80,34 @@ export default function PixelLoadingPreview({
   }, []);
 
   useEffect(() => {
-    if (inView && !started) {
-      setStarted(true);
-    }
-  }, [inView, started]);
+    if (!inView) return;
 
-  useEffect(() => {
-    if (!started) return;
-
-    let animationFrame = 0;
+    let timer = 0;
     const start = performance.now();
 
-    const tick = (currentTime: number) => {
-      const elapsed = currentTime - start;
+    const tick = () => {
+      const elapsed = performance.now() - start;
       const linearProgress = Math.min(1, elapsed / LOAD_DURATION_MS);
 
       setProgress(linearProgress);
 
-      if (linearProgress < 1) {
-        animationFrame = window.requestAnimationFrame(tick);
+      if (linearProgress >= 1) {
+        window.clearInterval(timer);
       }
     };
 
-    animationFrame = window.requestAnimationFrame(tick);
+    timer = window.setInterval(tick, PROGRESS_TICK_MS);
+    tick();
 
-    return () => window.cancelAnimationFrame(animationFrame);
-  }, [started]);
+    return () => window.clearInterval(timer);
+  }, [inView]);
 
   const loadingComplete = progress >= 1;
 
   return (
     <div
       ref={previewRef}
-      className="relative mt-8 border border-black/[0.06] bg-[#f1f0ec] md:mt-14"
+      className="relative mx-auto mt-8 w-full max-w-[1240px] border border-black/[0.06] bg-[#f1f0ec] md:mt-14"
     >
       <span className="corner-cross tl" />
       <span className="corner-cross tr" />
@@ -140,15 +128,17 @@ export default function PixelLoadingPreview({
           sizes="(max-width: 768px) 100vw, 90vw"
         />
 
-        <a
-          href={href}
-          target="_blank"
-          rel="noopener noreferrer"
-          aria-label="View project details"
-          data-cursor-label="View Details"
-          data-cursor-type="social-btn"
-          className="absolute inset-0 z-20"
-        />
+        {href ? (
+          <a
+            href={href}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="View project details"
+            data-cursor-label="View Details"
+            data-cursor-type="social-btn"
+            className="absolute inset-0 z-20"
+          />
+        ) : null}
 
         <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(to_right,rgba(0,0,0,0.03)_1px,transparent_1px)] bg-[size:12.5%_100%] opacity-35" />
 
@@ -167,10 +157,18 @@ export default function PixelLoadingPreview({
                 key={pixel.index}
                 className="border border-black/[0.025] transition-[opacity,transform] duration-300 ease-out"
                 style={{
-                  backgroundColor: hidden ? pixel.color : "transparent",
+                  backgroundImage: `url(${imageUrl})`,
+                  backgroundSize: `${grid.columns * 100}% ${grid.rows * 100}%`,
+                  backgroundPosition:
+                    grid.columns <= 1 || grid.rows <= 1
+                      ? "center"
+                      : `${(pixel.column / (grid.columns - 1)) * 100}% ${
+                          (pixel.row / (grid.rows - 1)) * 100
+                        }%`,
                   opacity: hidden ? 0.98 : 0,
                   transform: hidden ? "scale(1)" : "scale(0.84)",
                   willChange: "opacity, transform",
+                  filter: hidden ? "saturate(0.9) contrast(0.9)" : undefined,
                 }}
               />
             );
