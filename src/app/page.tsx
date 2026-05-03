@@ -144,25 +144,28 @@ export default function Home() {
     },
     {
       id: "003",
-      title: "Project 03",
-      category: "WEB APP · INTERFACE",
-      description: "Name, description, and project details coming soon.",
+      title: "Trendzy",
+      category: "ECOMMERCE · UI/UX",
+      description:
+        "A modern ecommerce website for a men's dress shop, designed with a clean shopping flow, polished product presentation, and sharp UI/UX details.",
       year: "2026",
       previewImage: projectTwoPreview,
     },
     {
       id: "004",
-      title: "Project 04",
-      category: "WEB APP · INTERFACE",
-      description: "Name, description, and project details coming soon.",
+      title: "Lumiere Jewels",
+      category: "ECOMMERCE · PRODUCT SHOWCASE",
+      description:
+        "An ecommerce showcase website for a jewellery company, built to present their product collections clearly and let customers send enquiries directly through WhatsApp.",
       year: "2026",
       previewImage: projectThreePreview,
     },
     {
       id: "005",
-      title: "Project 05",
-      category: "WEB APP · INTERFACE",
-      description: "Name, description, and project details coming soon.",
+      title: "Kido",
+      category: "ECOMMERCE · ADMIN PANEL",
+      description:
+        "A kids fashion ecommerce website with an integrated admin panel for managing products, collections, and store content from one clean dashboard.",
       year: "2026",
       previewImage: projectFourPreview,
     },
