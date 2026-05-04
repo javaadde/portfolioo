@@ -34,8 +34,8 @@ export default function Contact() {
   const socials = [
     { name: "LINKEDIN", href: "https://linkedin.com", icon: Linkedin },
     { name: "GITHUB", href: "https://github.com", icon: Github },
-    { name: "TWITTER", href: "https://twitter.com", icon: Twitter },
-    { name: "INSTAGRAM", href: "https://instagram.com", icon: null },
+    { name: "TWITTER", href: "https://x.com/javaaddee", icon: Twitter },
+    { name: "INSTAGRAM", href: "https://javade.in", icon: null },
   ];
 
   return (

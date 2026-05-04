@@ -138,7 +138,7 @@ export default function Home() {
     },
     {
       name: "Twitter",
-      href: "https://twitter.com/javaadde",
+      href: "https://x.com/javaaddee",
       icon: <Twitter className="w-4 h-4" />,
     },
     {
@@ -532,8 +532,8 @@ export default function Home() {
                 { name: "About ↗", href: "/about" },
                 { name: "LinkedIn ↗", href: "https://linkedin.com/in/javaadde" },
                 { name: "GitHub ↗", href: "https://github.com/javaadde" },
-                { name: "Twitter ↗", href: "https://twitter.com/javaadde" },
-                { name: "Instagram ↗", href: "https://instagram.com" },
+                { name: "Twitter ↗", href: "https://x.com/javaaddee" },
+                { name: "Instagram ↗", href: "https://javade.in" },
               ].map((link) => (
                 <Link
                   key={link.name}
