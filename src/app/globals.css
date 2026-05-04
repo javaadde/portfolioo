@@ -39,6 +39,10 @@ html {
   cursor: none !important;
 }
 
+.cursor-active * {
+  cursor: none !important;
+}
+
 .cursor-active a,
 .cursor-active button,
 .cursor-active [role="button"] {

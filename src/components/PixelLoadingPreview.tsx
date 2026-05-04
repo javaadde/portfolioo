@@ -116,7 +116,7 @@ export default function PixelLoadingPreview({
 
       <div
         ref={imageFrameRef}
-        className="relative aspect-[16/11] overflow-hidden md:aspect-[16/5]"
+        className="group/image relative aspect-[16/11] overflow-hidden md:aspect-[16/5]"
       >
         <Image
           src={src}
@@ -131,14 +131,18 @@ export default function PixelLoadingPreview({
         {href ? (
           <a
             href={href}
-            target="_blank"
-            rel="noopener noreferrer"
             aria-label="View project details"
             data-cursor-label="View Details"
-            data-cursor-type="social-btn"
+            data-cursor-type="project-image"
             className="absolute inset-0 z-20"
           />
         ) : null}
+
+        <div className="pointer-events-none absolute inset-0 z-10 flex items-center justify-center bg-black/0 transition-colors duration-300 group-hover/image:bg-black/[0.18]">
+          <span className="translate-y-2 border border-white/35 bg-black/70 px-5 py-3 font-mono text-[10px] font-semibold uppercase tracking-[0.22em] text-white opacity-0 backdrop-blur-md transition-all duration-300 group-hover/image:translate-y-0 group-hover/image:opacity-100">
+            View Details
+          </span>
+        </div>
 
         <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(to_right,rgba(0,0,0,0.03)_1px,transparent_1px)] bg-[size:12.5%_100%] opacity-35" />
 

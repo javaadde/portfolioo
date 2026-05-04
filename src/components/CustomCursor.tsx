@@ -23,12 +23,15 @@ export default function CustomCursor() {
   const [label, setLabel] = useState("");
   const [cursorType, setCursorType] = useState<string | null>(null);
   const [isPressed, setIsPressed] = useState(false);
-  const [isTouchDevice, setIsTouchDevice] = useState(false);
+  const [isTouchDevice] = useState(
+    () =>
+      typeof window !== "undefined" &&
+      ("ontouchstart" in window || navigator.maxTouchPoints > 0),
+  );
+  const isButtonCursor =
+    cursorType === "social-btn" || cursorType === "project-image";
 
   useEffect(() => {
-    // Detect touch devices
-    setIsTouchDevice("ontouchstart" in window || navigator.maxTouchPoints > 0);
-
     const handleMouseMove = (e: MouseEvent) => {
       mouseX.set(e.clientX);
       mouseY.set(e.clientY);
@@ -124,7 +127,7 @@ export default function CustomCursor() {
         }}
       >
         <AnimatePresence mode="wait">
-          {hovered && label && cursorType !== "social-btn" && (
+          {hovered && label && !isButtonCursor && (
             <motion.div
               key="default-label"
               initial={{ width: 0, height: 0, opacity: 0 }}
@@ -164,7 +167,7 @@ export default function CustomCursor() {
         }}
       >
         <AnimatePresence mode="wait">
-          {hovered && label && cursorType === "social-btn" && (
+          {hovered && label && isButtonCursor && (
             <motion.div
               key="social-btn-label"
               initial={{ scale: 0.5, opacity: 0 }}
@@ -201,7 +204,7 @@ export default function CustomCursor() {
       <motion.div
         animate={{
           scale:
-            cursorType === "social-btn"
+            isButtonCursor
               ? 0
               : isPressed
                 ? 0.6

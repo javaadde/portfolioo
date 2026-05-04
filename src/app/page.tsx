@@ -13,11 +13,8 @@ import {
 import { ScrambleText } from "@/components/ScrambleText";
 import PixelLoadingPreview from "@/components/PixelLoadingPreview";
 import InitialsLogo from "@/components/InitialsLogo";
+import { selectedProjects } from "@/data/selectedProjects";
 import Link from "next/link";
-import projectOnePreview from "@/assets/project-images/project-1.png";
-import projectTwoPreview from "@/assets/project-images/project-2.png";
-import projectThreePreview from "@/assets/project-images/project-3.png";
-import projectFourPreview from "@/assets/project-images/project-4.png";
 
 /* ────────────── ANIMATED SECTION WRAPPER ────────────── */
 function AnimatedSection({
@@ -127,49 +124,6 @@ export default function Home() {
     }, 1000);
     return () => clearInterval(timer);
   }, []);
-
-  /* ── DATA ── */
-  const projects = [
-    {
-      id: "002",
-      title: "Hayon",
-      category: "WEB APP · INTERFACE",
-      description:
-        "An all-in-one social media planning platform built to help teams think, plan, and post from one clean workspace with a fast mobile-first experience.",
-      year: "2026",
-      liveUrl: "https://hayon.site",
-      githubUrl: "https://github.com/devxtra-community/hayon",
-
-      previewImage: projectOnePreview,
-    },
-    {
-      id: "003",
-      title: "Trendzy",
-      category: "ECOMMERCE · UI/UX",
-      description:
-        "A modern ecommerce website for a men's dress shop, designed with a clean shopping flow, polished product presentation, and sharp UI/UX details.",
-      year: "2026",
-      previewImage: projectTwoPreview,
-    },
-    {
-      id: "004",
-      title: "Lumiere Jewels",
-      category: "ECOMMERCE · PRODUCT SHOWCASE",
-      description:
-        "An ecommerce showcase website for a jewellery company, built to present their product collections clearly and let customers send enquiries directly through WhatsApp.",
-      year: "2026",
-      previewImage: projectThreePreview,
-    },
-    {
-      id: "005",
-      title: "Kido",
-      category: "ECOMMERCE · ADMIN PANEL",
-      description:
-        "A kids fashion ecommerce website with an integrated admin panel for managing products, collections, and store content from one clean dashboard.",
-      year: "2026",
-      previewImage: projectFourPreview,
-    },
-  ];
 
   const socials = [
     {
@@ -425,7 +379,10 @@ export default function Home() {
       </section>
 
       {/* ═══════════════════ CASE STUDIES SECTION ═══════════════════ */}
-      <section className="relative z-10 px-4 sm:px-6 md:px-12 lg:px-16">
+      <section
+        id="selected-work"
+        className="relative z-10 px-4 sm:px-6 md:px-12 lg:px-16"
+      >
         {/* Section Header */}
         <AnimatedSection className="border-t border-black/[0.05] py-12 md:py-24">
           <div className="flex flex-col md:flex-row md:justify-between md:items-end gap-4">
@@ -466,9 +423,9 @@ export default function Home() {
         </AnimatedSection>
 
         {/* Project Cards */}
-        {projects.map((project, i) => (
+        {selectedProjects.map((project, i) => (
           <AnimatedSection key={project.id} delay={i * 0.1}>
-            <div className="group relative cursor-pointer border-t border-black/[0.05] py-10 sm:py-12 md:py-20">
+            <div className="relative border-t border-black/[0.05] py-10 sm:py-12 md:py-20">
               <div className="relative z-10 grid grid-cols-1 gap-5 border border-black/[0.05] px-5 py-6 md:grid-cols-12 md:items-start md:gap-x-10 md:gap-y-4 md:px-8 md:py-7 lg:gap-x-14">
                 <span className="corner-plus tl" />
                 <span className="corner-plus tr" />
@@ -524,7 +481,7 @@ export default function Home() {
               <PixelLoadingPreview
                 src={project.previewImage!}
                 alt={`${project.title} project showcase preview`}
-                href={project.liveUrl}
+                href={`/projects/${project.slug}`}
               />
             </div>
           </AnimatedSection>
