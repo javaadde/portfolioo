@@ -35,7 +35,7 @@ export default function Contact() {
     { name: "LINKEDIN", href: "https://linkedin.com", icon: Linkedin },
     { name: "GITHUB", href: "https://github.com", icon: Github },
     { name: "TWITTER", href: "https://x.com/javaaddee", icon: Twitter },
-    { name: "INSTAGRAM", href: "https://javade.in", icon: null },
+    { name: "INSTAGRAM", href: "https://instagram.com/javade.in", icon: null },
   ];
 
   return (

@@ -6,8 +6,8 @@ import { format } from "date-fns";
 import {
   ArrowUpRight,
   Github,
+  Instagram,
   Linkedin,
-  Twitter,
   Mail,
 } from "lucide-react";
 import { ScrambleText } from "@/components/ScrambleText";
@@ -137,9 +137,9 @@ export default function Home() {
       icon: <Linkedin className="w-4 h-4" />,
     },
     {
-      name: "Twitter",
-      href: "https://x.com/javaaddee",
-      icon: <Twitter className="w-4 h-4" />,
+      name: "Instagram",
+      href: "https://instagram.com/javade.in",
+      icon: <Instagram className="w-4 h-4" />,
     },
     {
       name: "Email",
@@ -287,13 +287,14 @@ export default function Home() {
                 </div>
               </div>
 
-              <Link
-                href="mailto:javaadde@gmail.com"
+              <button
+                type="button"
+                data-connect-trigger
                 className="connect-btn flex items-center justify-between"
               >
                 LET&apos;S CONNECT
                 <ArrowUpRight className="h-4 w-4" />
-              </Link>
+              </button>
             </motion.div>
           </div>
 
@@ -533,7 +534,7 @@ export default function Home() {
                 { name: "LinkedIn ↗", href: "https://linkedin.com/in/javaadde" },
                 { name: "GitHub ↗", href: "https://github.com/javaadde" },
                 { name: "Twitter ↗", href: "https://x.com/javaaddee" },
-                { name: "Instagram ↗", href: "https://javade.in" },
+                { name: "Instagram ↗", href: "https://instagram.com/javade.in" },
               ].map((link) => (
                 <Link
                   key={link.name}
@@ -549,13 +550,14 @@ export default function Home() {
             </div>
 
             {/* CTA Button */}
-            <Link
-              href="mailto:javaadde@gmail.com"
+            <button
+              type="button"
+              data-connect-trigger
               className="connect-btn flex w-full items-center justify-between gap-3 md:w-auto md:justify-center"
             >
               LET&apos;S CONNECT
               <ArrowUpRight className="w-3.5 h-3.5" />
-            </Link>
+            </button>
           </div>
         </AnimatedSection>
 

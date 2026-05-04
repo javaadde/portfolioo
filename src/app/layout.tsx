@@ -3,6 +3,7 @@ import { Inter, Outfit, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import NavBar from "@/components/NavBar";
 import CustomCursor from "@/components/CustomCursor";
+import ConnectPopup from "@/components/ConnectPopup";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -43,6 +44,7 @@ export default function RootLayout({
         className={`${inter.variable} ${outfit.variable} ${jetbrains.variable} antialiased font-body bg-background cursor-active`}
       >
         <CustomCursor />
+        <ConnectPopup />
         <NavBar />
         <main className="relative z-[2]">{children}</main>
       </body>

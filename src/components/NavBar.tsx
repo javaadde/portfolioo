@@ -86,13 +86,14 @@ const NavBar = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.5, duration: 0.5 }}
           >
-            <Link
-              href="mailto:javaadde@gmail.com"
+            <button
+              type="button"
+              data-connect-trigger
               className="bg-accent text-white text-[10px] font-bold tracking-[0.15em] uppercase px-4 py-2 transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] relative overflow-hidden flex items-center gap-1.5 "
             >
               LET&apos;S CONNECT
               <ArrowUpRight className="w-3 h-3 opacity-70" />
-            </Link>
+            </button>
           </motion.div>
         </div>
 
@@ -157,14 +158,15 @@ const NavBar = () => {
                 </span>
               </div>
 
-              <Link
-                href="mailto:javaadde@gmail.com"
+              <button
+                type="button"
+                data-connect-trigger
                 onClick={() => setMobileOpen(false)}
                 className="connect-btn flex items-center justify-between"
               >
                 LET&apos;S CONNECT
                 <ArrowUpRight className="h-4 w-4" />
-              </Link>
+              </button>
             </div>
           </motion.div>
         )}

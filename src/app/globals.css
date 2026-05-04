@@ -164,6 +164,7 @@ html {
 
 /* ===== LET'S CONNECT BUTTON ===== */
 .connect-btn {
+  border: 0;
   background: var(--accent);
   color: white;
   font-size: 11px;
