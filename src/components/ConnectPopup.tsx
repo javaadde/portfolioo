@@ -6,6 +6,7 @@ import {
   ArrowUpRight,
   Instagram,
   Linkedin,
+  Mail,
   MessageCircle,
   Twitter,
   X as CloseIcon,
@@ -21,7 +22,7 @@ const connectOptions = [
   {
     name: "WhatsApp",
     detail: "Start a quick chat",
-    href: "https://wa.me/?text=Hi%20Javad%2C%20I%20came%20from%20your%20portfolio.",
+    href: "https://wa.me/917902937442?text=Hi%20Javad%2C%20I%20came%20from%20your%20portfolio.",
     icon: MessageCircle,
   },
   {
@@ -35,6 +36,12 @@ const connectOptions = [
     detail: "@javaaddee",
     href: "https://x.com/javaaddee",
     icon: Twitter,
+  },
+  {
+    name: "Email",
+    detail: "javaadde@gmail.com",
+    href: "mailto:javaadde@gmail.com",
+    icon: Mail,
   },
 ];
 
@@ -133,8 +140,14 @@ export default function ConnectPopup() {
                   <a
                     key={option.name}
                     href={option.href}
-                    target="_blank"
-                    rel="noopener noreferrer"
+                    target={option.href.startsWith("mailto:") ? undefined : "_blank"}
+                    rel={
+                      option.href.startsWith("mailto:")
+                        ? undefined
+                        : "noopener noreferrer"
+                    }
+                    data-cursor-label={option.name}
+                    data-cursor-type="connect-option"
                     className="group flex items-center justify-between border-b border-black/[0.05] py-4 last:border-b-0"
                     onClick={() => setOpen(false)}
                   >

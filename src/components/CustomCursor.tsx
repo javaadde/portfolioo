@@ -30,6 +30,7 @@ export default function CustomCursor() {
   );
   const isButtonCursor =
     cursorType === "social-btn" || cursorType === "project-image";
+  const isConnectCursor = cursorType === "connect-option";
 
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
@@ -71,7 +72,7 @@ export default function CustomCursor() {
     <div className="hidden md:block pointer-events-none">
       {/* Crosshair Lines */}
       <motion.div
-        className="fixed inset-0 pointer-events-none z-[9998]"
+        className="fixed inset-0 pointer-events-none z-[10040]"
         animate={{ opacity: 1 }}
         transition={{ duration: 0.2 }}
       >
@@ -118,7 +119,7 @@ export default function CustomCursor() {
 
       {/* Hover Label Pill — default style */}
       <motion.div
-        className="fixed top-0 left-0 pointer-events-none z-[9999] flex items-center justify-center transform-gpu"
+        className="fixed top-0 left-0 pointer-events-none z-[10041] flex items-center justify-center transform-gpu"
         style={{
           x: smoothX,
           y: smoothY,
@@ -127,7 +128,7 @@ export default function CustomCursor() {
         }}
       >
         <AnimatePresence mode="wait">
-          {hovered && label && !isButtonCursor && (
+          {hovered && label && !isButtonCursor && !isConnectCursor && (
             <motion.div
               key="default-label"
               initial={{ width: 0, height: 0, opacity: 0 }}
@@ -156,9 +157,94 @@ export default function CustomCursor() {
         </AnimatePresence>
       </motion.div>
 
+      {/* Connect Popup Cursor — magnetic orb style */}
+      <motion.div
+        className="fixed top-0 left-0 pointer-events-none z-[10043] flex items-center justify-center transform-gpu"
+        style={{
+          x: smoothX,
+          y: smoothY,
+          translateX: "-50%",
+          translateY: "-50%",
+        }}
+      >
+        <AnimatePresence mode="wait">
+          {hovered && label && isConnectCursor && (
+            <motion.div
+              key="connect-option-cursor"
+              initial={{ scale: 0.35, opacity: 0 }}
+              animate={{
+                scale: isPressed ? 0.86 : 1,
+                opacity: 1,
+              }}
+              exit={{ scale: 0.35, opacity: 0 }}
+              transition={{ duration: 0.22, ease: [0.16, 1, 0.3, 1] }}
+              className="relative flex h-[86px] w-[86px] items-center justify-center"
+            >
+              <motion.div
+                className="absolute inset-0 rounded-full border border-accent/40"
+                animate={{
+                  scale: [0.78, 1.08, 0.78],
+                  opacity: [0.25, 0.75, 0.25],
+                }}
+                transition={{
+                  duration: 1.7,
+                  repeat: Infinity,
+                  ease: "easeInOut",
+                }}
+              />
+              <motion.div
+                className="absolute h-[68px] w-[68px] rounded-full border border-black/45"
+                animate={{ rotate: 360 }}
+                transition={{ duration: 2.2, repeat: Infinity, ease: "linear" }}
+              >
+                <span className="absolute left-1/2 top-[-3px] h-[6px] w-[6px] -translate-x-1/2 rounded-full bg-accent" />
+                <span className="absolute bottom-[-3px] left-1/2 h-[6px] w-[6px] -translate-x-1/2 rounded-full bg-black/70" />
+              </motion.div>
+              <motion.div
+                className="absolute h-[46px] w-[46px] rounded-full bg-black shadow-[0_0_30px_rgba(0,96,84,0.38)]"
+                animate={{
+                  scale: [1, 0.92, 1],
+                  boxShadow: [
+                    "0 0 18px rgba(0,96,84,0.28)",
+                    "0 0 42px rgba(0,96,84,0.52)",
+                    "0 0 18px rgba(0,96,84,0.28)",
+                  ],
+                }}
+                transition={{
+                  duration: 1.2,
+                  repeat: Infinity,
+                  ease: "easeInOut",
+                }}
+              />
+              <motion.div
+                className="absolute -right-10 top-1/2 flex h-7 -translate-y-1/2 items-center bg-accent px-3 text-white shadow-xl"
+                initial={{ opacity: 0, x: -8 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: -8 }}
+                transition={{ duration: 0.18 }}
+              >
+                <span className="font-mono text-[9px] font-black uppercase tracking-[0.18em]">
+                  Open
+                </span>
+              </motion.div>
+              <motion.span
+                key={label}
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.8 }}
+                transition={{ duration: 0.12 }}
+                className="relative z-10 max-w-[38px] text-center font-mono text-[7px] font-black uppercase leading-none tracking-[0.1em] text-white"
+              >
+                {label}
+              </motion.span>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </motion.div>
+
       {/* Social Button Cursor — small button style */}
       <motion.div
-        className="fixed top-0 left-0 pointer-events-none z-[10001] flex items-center justify-center transform-gpu"
+        className="fixed top-0 left-0 pointer-events-none z-[10042] flex items-center justify-center transform-gpu"
         style={{
           x: smoothX,
           y: smoothY,
@@ -204,7 +290,7 @@ export default function CustomCursor() {
       <motion.div
         animate={{
           scale:
-            isButtonCursor
+            isButtonCursor || isConnectCursor
               ? 0
               : isPressed
                 ? 0.6
@@ -219,7 +305,7 @@ export default function CustomCursor() {
           stiffness: 400,
           damping: 25,
         }}
-        className="fixed top-0 left-0 pointer-events-none z-[10000] w-[8px] h-[8px]"
+        className="fixed top-0 left-0 pointer-events-none z-[10042] w-[8px] h-[8px]"
         style={{
           x: smoothX,
           y: smoothY,
