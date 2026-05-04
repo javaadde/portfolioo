@@ -149,8 +149,7 @@ export default function Home() {
   ];
 
   const mobileHighlightExperiences = [
-    { id: "aeza", label: "Aeza, Bangalore, Ind" },
-    { id: "design-studio", label: "DesignStudio, Kolkata, Ind" },
+    { id: "devxtra", label: "Devxtra, Kochi, Ind" },
   ];
 
   return (
