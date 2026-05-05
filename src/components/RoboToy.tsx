@@ -131,7 +131,7 @@ function createPortfolioAnswer(question: string) {
       q,
     )
   ) {
-    return "My name is Kuttu. I am Javad's little pixel assistant, here to help you explore his portfolio.";
+    return "My name is Kuttu. I'm Javad's little robo pet, here to help you explore his portfolio.";
   }
 
   if (/(hello|hi|hey|help)/.test(q)) {
@@ -607,12 +607,10 @@ export default function RoboToy({ variant = "home" }: { variant?: RoboVariant })
             <rect x="39" y="54" width="39" height="6" fill="#245a4d" />
             <rect x="46" y="39" width="7" height="7" fill="#e6e779" />
             <rect x="70" y="39" width="7" height="7" fill="#e6e779" />
-            <rect x="55" y="50" width="6" height="8" fill="#e6e779" />
-            <rect x="61" y="56" width="16" height="5" fill="#e6e779" />
-            <rect x="77" y="50" width="5" height="11" fill="#e6e779" />
             <rect x="40" y="24" width="35" height="4" fill="#0c2e29" />
             <rect x="78" y="21" width="3" height="37" fill="#8fb9a5" />
             <rect x="39" y="58" width="38" height="3" fill="#8fb9a5" />
+            <rect x="54" y="54" width="17" height="4" fill="#e6e779" />
           </g>
         </svg>
       </div>
