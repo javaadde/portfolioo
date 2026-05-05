@@ -134,7 +134,41 @@ function createPortfolioAnswer(question: string) {
     return "My name is Kuttu. I'm Javad's little robo pet, here to help you explore his portfolio.";
   }
 
-  if (/(hello|hi|hey|help)/.test(q)) {
+  if (
+    /(phone|number|mobile|whatsapp)/.test(q)
+  ) {
+    return "7902937442";
+  }
+
+  if (/(insta|instagram|instegram)/.test(q)) {
+    return "@javaadde";
+  }
+
+  if (/\b(x|twitter)\b/.test(q)) {
+    return "javaaddee";
+  }
+
+  if (/linkedin/.test(q)) {
+    return "javaadde";
+  }
+
+  if (/github/.test(q)) {
+    return "javaadde";
+  }
+
+  if (/(email|mail)/.test(q)) {
+    return "javaadde@gmail.com";
+  }
+
+  if (
+    /(contact|connect|hire|freelance|available|availability|job|dm|social (media )?(id|handle|link|profile|account))/.test(
+      q,
+    )
+  ) {
+    return "Click the Connect button in the menu and choose the channel you prefer.";
+  }
+
+  if (/\b(hello|hi|hey|help)\b/.test(q)) {
     return "Hey, Kuttu here. I can help with Javad's portfolio, projects, skills, contact, and availability.";
   }
 
@@ -144,14 +178,6 @@ function createPortfolioAnswer(question: string) {
 
   if (/(skill|stack|technology|tools|tech)/.test(q)) {
     return "Javad works with React, Next.js, TypeScript, Tailwind CSS, Framer Motion, Node.js, Express, MongoDB, PostgreSQL, Prisma, Docker, Git, Figma, VS Code, and Linux.";
-  }
-
-  if (
-    /(contact|connect|email|mail|hire|freelance|available|availability|job|phone|number|mobile|whatsapp|dm|insta|instagram|linkedin|github|twitter|x account|social (media )?(id|handle|link|profile|account))/.test(
-      q,
-    )
-  ) {
-    return "You can connect with Javad here: Instagram @javaadde, WhatsApp 7902937442, X javaaddee, and LinkedIn javaadde.";
   }
 
   if (/(project|work|case|portfolio)/.test(q)) {
