@@ -13,6 +13,7 @@ import {
 import { ScrambleText } from "@/components/ScrambleText";
 import PixelLoadingPreview from "@/components/PixelLoadingPreview";
 import InitialsLogo from "@/components/InitialsLogo";
+import RoboToy from "@/components/RoboToy";
 import { selectedProjects } from "@/data/selectedProjects";
 import Link from "next/link";
 
@@ -156,6 +157,7 @@ export default function Home() {
     <div className="relative min-h-screen select-none text-foreground overflow-x-hidden">
       {/* VIGNETTE GLOW */}
       <div className="vignette-glow" />
+      <RoboToy />
 
       {/* ARCHITECTURAL BACKGROUND GRID */}
       <div className="fixed inset-0 pointer-events-none z-[0]">

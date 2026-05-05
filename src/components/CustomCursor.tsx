@@ -9,6 +9,38 @@ import {
   useTransform,
 } from "framer-motion";
 
+function isDarkTextElement(element: Element | null) {
+  if (!(element instanceof HTMLElement)) return false;
+
+  const textTarget = element.closest(
+    "h1, h2, h3, h4, h5, h6, p, span, a, button, [data-cursor-invert]",
+  );
+
+  if (!(textTarget instanceof HTMLElement)) return false;
+  if (!textTarget.textContent?.trim()) return false;
+
+  const { color, opacity } = window.getComputedStyle(textTarget);
+  const colorMatch = color.match(
+    /rgba?\((\d+(?:\.\d+)?),\s*(\d+(?:\.\d+)?),\s*(\d+(?:\.\d+)?)(?:,\s*(\d+(?:\.\d+)?))?\)/,
+  );
+
+  if (!colorMatch) return false;
+
+  const red = Number(colorMatch[1]);
+  const green = Number(colorMatch[2]);
+  const blue = Number(colorMatch[3]);
+  const alpha = colorMatch[4] ? Number(colorMatch[4]) : 1;
+  const elementOpacity = Number(opacity);
+  const effectiveAlpha =
+    alpha * (Number.isFinite(elementOpacity) ? elementOpacity : 1);
+
+  if (effectiveAlpha < 0.55) return false;
+
+  const luminance = 0.2126 * red + 0.7152 * green + 0.0722 * blue;
+
+  return luminance < 70;
+}
+
 export default function CustomCursor() {
   const mouseX = useMotionValue(-100);
   const mouseY = useMotionValue(-100);
@@ -23,6 +55,7 @@ export default function CustomCursor() {
   const [label, setLabel] = useState("");
   const [cursorType, setCursorType] = useState<string | null>(null);
   const [isPressed, setIsPressed] = useState(false);
+  const [isOverDarkText, setIsOverDarkText] = useState(false);
   const [isTouchDevice] = useState(
     () =>
       typeof window !== "undefined" &&
@@ -36,6 +69,9 @@ export default function CustomCursor() {
     const handleMouseMove = (e: MouseEvent) => {
       mouseX.set(e.clientX);
       mouseY.set(e.clientY);
+      setIsOverDarkText(
+        isDarkTextElement(document.elementFromPoint(e.clientX, e.clientY)),
+      );
     };
 
     const handleMouseOver = (e: MouseEvent) => {
@@ -298,7 +334,11 @@ export default function CustomCursor() {
                   ? 1.5
                   : 1,
           rotate: hovered ? 45 : 0,
-          backgroundColor: hovered ? "rgba(0, 0, 0, 1)" : "rgba(0, 0, 0, 0.6)",
+          backgroundColor: isOverDarkText
+            ? "rgba(255, 255, 255, 0.95)"
+            : hovered
+              ? "rgba(0, 0, 0, 1)"
+              : "rgba(0, 0, 0, 0.6)",
         }}
         transition={{
           type: "spring",
