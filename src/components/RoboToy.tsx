@@ -147,11 +147,11 @@ function createPortfolioAnswer(question: string) {
   }
 
   if (
-    /(contact|connect|email|mail|hire|freelance|available|availability|job|phone|number|mobile|whatsapp|dm|instagram|linkedin|github|twitter|x account|social (media )?(id|handle|link|profile|account))/.test(
+    /(contact|connect|email|mail|hire|freelance|available|availability|job|phone|number|mobile|whatsapp|dm|insta|instagram|linkedin|github|twitter|x account|social (media )?(id|handle|link|profile|account))/.test(
       q,
     )
   ) {
-    return "You can click the Connect button in the menu and connect through the channel you prefer.";
+    return "You can connect with Javad here: Instagram @javaadde, WhatsApp 7902937442, X javaaddee, and LinkedIn javaadde.";
   }
 
   if (/(project|work|case|portfolio)/.test(q)) {
@@ -449,7 +449,6 @@ export default function RoboToy({ variant = "home" }: { variant?: RoboVariant })
   const chatAlignLeft = position.x < 200;
   const isPeek = variant === "peek";
   const chatAlignBelow = isPeek && position.y < 230;
-  const peekExpressionOffset = isPeek ? (chatAlignLeft ? 4 : -4) : 0;
 
   return (
     <div
@@ -610,14 +609,12 @@ export default function RoboToy({ variant = "home" }: { variant?: RoboVariant })
             <rect x="38" y="20" width="41" height="40" fill="#2d6b5d" />
             <rect x="38" y="20" width="41" height="7" fill="#3e8372" />
             <rect x="39" y="54" width="39" height="6" fill="#245a4d" />
+            <rect x="46" y="39" width="7" height="7" fill="#e6e779" />
+            <rect x="70" y="39" width="7" height="7" fill="#e6e779" />
             <rect x="40" y="24" width="35" height="4" fill="#0c2e29" />
             <rect x="78" y="21" width="3" height="37" fill="#8fb9a5" />
             <rect x="39" y="58" width="38" height="3" fill="#8fb9a5" />
-            <g transform={`translate(${peekExpressionOffset} 0)`}>
-              <rect x="46" y="39" width="7" height="7" fill="#e6e779" />
-              <rect x="70" y="39" width="7" height="7" fill="#e6e779" />
-              <rect x="54" y="54" width="17" height="4" fill="#e6e779" />
-            </g>
+            <rect x="54" y="54" width="17" height="4" fill="#e6e779" />
           </g>
         </svg>
       </div>
