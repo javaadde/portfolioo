@@ -135,7 +135,7 @@ function createPortfolioAnswer(question: string) {
   }
 
   if (/\b(thanks|thank you|thank u|appreciate it|good|nice|great|awesome|well done)\b/.test(q)) {
-    return "You're welcome. Glad I could help.";
+    return "Ooh, that's so nice of you.";
   }
 
   if (
