@@ -356,6 +356,14 @@ html {
   transform-origin: 50% 90%;
 }
 
+.robo-peek .robo-toy {
+  clip-path: inset(0 0 38% 0);
+}
+
+.robo-peek .robo-toy svg {
+  transform-origin: 50% 34%;
+}
+
 .pixel-robo-toy,
 .pixel-robo-toy svg {
   image-rendering: pixelated;
@@ -399,9 +407,20 @@ html {
   left: 0;
 }
 
+.robo-peek.chat-left .robo-comment,
+.robo-peek.chat-left .robo-chat {
+  left: 58px;
+}
+
 .robo-peek:not(.chat-left) .robo-comment,
 .robo-peek:not(.chat-left) .robo-chat {
-  right: 50px;
+  right: 58px;
+}
+
+.chat-below .robo-comment,
+.chat-below .robo-chat {
+  top: calc(62% + 10px);
+  bottom: auto;
 }
 
 .robo-comment::after {
@@ -437,9 +456,29 @@ html {
   left: 26px;
 }
 
+.robo-peek.chat-left .robo-comment::after,
+.robo-peek.chat-left .robo-chat::after {
+  left: 14px;
+}
+
 .robo-peek:not(.chat-left) .robo-comment::after,
 .robo-peek:not(.chat-left) .robo-chat::after {
   right: 14px;
+}
+
+.chat-below .robo-comment::after,
+.chat-below .robo-chat::after {
+  top: -8px;
+  bottom: auto;
+  border-right: 0;
+  border-bottom: 0;
+  border-left: 1px solid rgba(0, 0, 0, 0.09);
+  border-top: 1px solid rgba(0, 0, 0, 0.09);
+}
+
+.chat-below .robo-chat::after {
+  border-left-color: rgba(0, 0, 0, 0.1);
+  border-top-color: rgba(0, 0, 0, 0.1);
 }
 
 .robo-chat-log {

@@ -32,7 +32,7 @@ const SCROLL_MESSAGE_COOLDOWN_MS = 12000;
 const INTRO_MESSAGE =
   "Hey, Kuttu here to help. What do you need to know about Javad?";
 const SCROLL_MESSAGE = "hey where you going i think you realy need my help";
-const PEEK_MESSAGE = "shhhhh!. did you need my help?";
+const PEEK_MESSAGE = "shhhhh! did you need my help?";
 const PEEK_DELAY_MS = 5000;
 
 function clamp(value: number, min: number, max: number) {
@@ -109,8 +109,8 @@ function getRandomPeekPosition(size: number): Position {
   return {
     x:
       side === "right"
-        ? window.innerWidth - size * 0.48
-        : -size * 0.52,
+        ? window.innerWidth - size * 0.7
+        : -size * 0.3,
     y: clamp(y, EDGE_PADDING + 64, window.innerHeight - height - EDGE_PADDING),
   };
 }
@@ -121,6 +121,10 @@ function getStandDelay() {
 
 function createPortfolioAnswer(question: string) {
   const q = question.toLowerCase();
+
+  if (/(hide|hiding|hidden|peek|peeking|sneak|paali|pali|nokkuka)/.test(q)) {
+    return "Shhh... don't talk loudly. Javad's gonna see me.";
+  }
 
   if (
     /(kuttu|your name|ur name|robot name|assistant name|who are you|what are you)/.test(
@@ -413,7 +417,7 @@ export default function RoboToy({ variant = "home" }: { variant?: RoboVariant })
       window.removeEventListener("pointerup", handlePointerUp);
       window.removeEventListener("pointercancel", handlePointerUp);
     };
-  }, []);
+  }, [variant]);
 
   const handleChatSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -440,12 +444,13 @@ export default function RoboToy({ variant = "home" }: { variant?: RoboVariant })
   const isDragging = mode === "dragging";
   const chatAlignLeft = position.x < 200;
   const isPeek = variant === "peek";
+  const chatAlignBelow = isPeek && position.y < 230;
 
   return (
     <div
       className={`robo-assistant fixed left-0 top-0 z-[80] ${
         chatAlignLeft ? "chat-left" : ""
-      } ${isPeek ? "robo-peek" : ""}`}
+      } ${chatAlignBelow ? "chat-below" : ""} ${isPeek ? "robo-peek" : ""}`}
       style={{
         width: robotSize,
         height: getRobotHeight(robotSize),
@@ -547,7 +552,7 @@ export default function RoboToy({ variant = "home" }: { variant?: RoboVariant })
             }
           }
         }}
-      className={`robo-toy pixel-robo-toy touch-none outline-none transition-[filter] duration-300 focus-visible:drop-shadow-[0_0_0.75rem_rgba(0,96,84,0.45)] ${
+        className={`robo-toy pixel-robo-toy touch-none outline-none transition-[filter] duration-300 focus-visible:drop-shadow-[0_0_0.75rem_rgba(0,96,84,0.45)] ${
           isWalking && facing > 0 ? "walk-right" : ""
         } ${isWalking && facing < 0 ? "walk-left" : ""}`}
         style={{
