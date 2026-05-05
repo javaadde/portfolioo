@@ -146,6 +146,14 @@ function createPortfolioAnswer(question: string) {
     return "Javad works with React, Next.js, TypeScript, Tailwind CSS, Framer Motion, Node.js, Express, MongoDB, PostgreSQL, Prisma, Docker, Git, Figma, VS Code, and Linux.";
   }
 
+  if (
+    /(contact|connect|email|mail|hire|freelance|available|availability|job|phone|number|mobile|whatsapp|dm|instagram|linkedin|github|twitter|x account|social (media )?(id|handle|link|profile|account))/.test(
+      q,
+    )
+  ) {
+    return "You can click the Connect button in the menu and connect through the channel you prefer.";
+  }
+
   if (/(project|work|case|portfolio)/.test(q)) {
     return "Highlighted projects include Hayon, Trendzy, Lumiere Jewels, and Kido: social media planning, ecommerce, product showcases, admin panels, UI/UX, and full-stack development.";
   }
@@ -164,10 +172,6 @@ function createPortfolioAnswer(question: string) {
 
   if (/(kido|kids|admin)/.test(q)) {
     return "Kido is a kids fashion ecommerce website with an integrated admin panel for products, collections, and store content.";
-  }
-
-  if (/(contact|email|hire|freelance|available|availability|job)/.test(q)) {
-    return "You can contact Javad at javaadde@gmail.com. He is open for freelance and full-time opportunities worldwide.";
   }
 
   if (/(location|where|based)/.test(q)) {
@@ -445,6 +449,7 @@ export default function RoboToy({ variant = "home" }: { variant?: RoboVariant })
   const chatAlignLeft = position.x < 200;
   const isPeek = variant === "peek";
   const chatAlignBelow = isPeek && position.y < 230;
+  const peekExpressionOffset = isPeek ? (chatAlignLeft ? 4 : -4) : 0;
 
   return (
     <div
@@ -605,12 +610,14 @@ export default function RoboToy({ variant = "home" }: { variant?: RoboVariant })
             <rect x="38" y="20" width="41" height="40" fill="#2d6b5d" />
             <rect x="38" y="20" width="41" height="7" fill="#3e8372" />
             <rect x="39" y="54" width="39" height="6" fill="#245a4d" />
-            <rect x="46" y="39" width="7" height="7" fill="#e6e779" />
-            <rect x="70" y="39" width="7" height="7" fill="#e6e779" />
             <rect x="40" y="24" width="35" height="4" fill="#0c2e29" />
             <rect x="78" y="21" width="3" height="37" fill="#8fb9a5" />
             <rect x="39" y="58" width="38" height="3" fill="#8fb9a5" />
-            <rect x="54" y="54" width="17" height="4" fill="#e6e779" />
+            <g transform={`translate(${peekExpressionOffset} 0)`}>
+              <rect x="46" y="39" width="7" height="7" fill="#e6e779" />
+              <rect x="70" y="39" width="7" height="7" fill="#e6e779" />
+              <rect x="54" y="54" width="17" height="4" fill="#e6e779" />
+            </g>
           </g>
         </svg>
       </div>
