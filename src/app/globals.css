@@ -375,12 +375,19 @@ html {
 }
 
 .robo-comment {
-  width: max-content;
-  max-width: min(260px, calc(100vw - 24px));
+  z-index: 2;
+  width: min(230px, calc(100vw - 24px));
+  min-height: 42px;
+  border: 2px solid #171717;
+  background: #fffdf1;
+  box-shadow: 5px 5px 0 rgba(0, 0, 0, 0.82);
+  padding: 10px 12px;
   font-family: var(--font-mono);
-  font-size: 10px;
+  font-size: 11px;
+  font-weight: 600;
   line-height: 1.45;
-  color: rgba(0, 0, 0, 0.68);
+  color: rgba(0, 0, 0, 0.78);
+  overflow-wrap: break-word;
   animation: robo-comment-pop 0.22s ease-out;
 }
 
@@ -390,7 +397,20 @@ html {
   left: 0;
 }
 
-.robo-comment::after,
+.robo-comment::after {
+  content: "";
+  position: absolute;
+  right: 28px;
+  bottom: -9px;
+  width: 14px;
+  height: 14px;
+  border-right: 2px solid #171717;
+  border-bottom: 2px solid #171717;
+  background: #fffdf1;
+  box-shadow: 3px 3px 0 rgba(0, 0, 0, 0.82);
+  transform: rotate(45deg);
+}
+
 .robo-chat::after {
   content: "";
   position: absolute;
