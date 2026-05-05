@@ -134,6 +134,10 @@ function createPortfolioAnswer(question: string) {
     return "My name is Kuttu. I'm Javad's little robo pet, here to help you explore his portfolio.";
   }
 
+  if (/\b(thanks|thank you|thank u|appreciate it|good|nice|great|awesome|well done)\b/.test(q)) {
+    return "You're welcome. Glad I could help.";
+  }
+
   if (
     /(phone|number|mobile|whatsapp)/.test(q)
   ) {
