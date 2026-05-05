@@ -356,6 +356,12 @@ html {
   transform-origin: 50% 90%;
 }
 
+.pixel-robo-toy,
+.pixel-robo-toy svg {
+  image-rendering: pixelated;
+}
+
+.robo-comment,
 .robo-chat {
   position: absolute;
   right: 0;
@@ -368,11 +374,23 @@ html {
   backdrop-filter: blur(18px);
 }
 
+.robo-comment {
+  width: max-content;
+  max-width: min(260px, calc(100vw - 24px));
+  font-family: var(--font-mono);
+  font-size: 10px;
+  line-height: 1.45;
+  color: rgba(0, 0, 0, 0.68);
+  animation: robo-comment-pop 0.22s ease-out;
+}
+
+.chat-left .robo-comment,
 .chat-left .robo-chat {
   right: auto;
   left: 0;
 }
 
+.robo-comment::after,
 .robo-chat::after {
   content: "";
   position: absolute;
@@ -386,6 +404,7 @@ html {
   transform: rotate(45deg);
 }
 
+.chat-left .robo-comment::after,
 .chat-left .robo-chat::after {
   right: auto;
   left: 26px;
@@ -459,94 +478,87 @@ html {
   text-transform: uppercase;
 }
 
-.robo-toy-body {
-  transform-origin: 90px 168px;
+.pixel-robot-core {
+  transform-origin: 50px 62px;
+  animation: pixel-robo-idle 2.8s steps(2, end) infinite;
 }
 
-.robo-head {
-  transform-origin: 90px 86px;
-  animation: robo-idle 2.8s ease-in-out infinite;
+.robo-toy-walk .pixel-robot-core {
+  animation: pixel-robo-walk 0.52s steps(2, end) infinite;
 }
 
-.robo-toy-walk .robo-toy-body {
-  animation: robo-step-bounce 0.46s ease-in-out infinite;
+.robo-toy-walk .pixel-leg-left {
+  animation: pixel-left-step 0.52s steps(2, end) infinite;
+  transform-origin: 45px 95px;
 }
 
-.robo-toy-walk .robo-head {
-  animation: robo-head-walk 0.46s ease-in-out infinite;
+.robo-toy-walk .pixel-leg-right {
+  animation: pixel-right-step 0.52s steps(2, end) infinite;
+  transform-origin: 61px 95px;
 }
 
-.robo-toy-walk .robo-leg-left {
-  animation: robo-left-step 0.46s ease-in-out infinite;
-  transform-origin: 75px 176px;
+.robo-toy-held .pixel-robot-core {
+  animation: pixel-robo-held 0.48s steps(2, end) infinite;
 }
 
-.robo-toy-walk .robo-leg-right {
-  animation: robo-right-step 0.46s ease-in-out infinite;
-  transform-origin: 92px 176px;
+@keyframes robo-comment-pop {
+  from {
+    opacity: 0;
+    transform: translateY(4px) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
 }
 
-.robo-toy-held {
-  animation: robo-held-wiggle 0.62s ease-in-out infinite;
-}
-
-@keyframes robo-idle {
+@keyframes pixel-robo-idle {
   0%,
   100% {
-    transform: translateY(0) rotate(0deg);
+    transform: translateY(0);
   }
   50% {
-    transform: translateY(-2px) rotate(-1.5deg);
+    transform: translateY(-2px);
   }
 }
 
-@keyframes robo-step-bounce {
+@keyframes pixel-robo-walk {
   0%,
   100% {
-    transform: translateY(0) rotate(0deg);
+    transform: translateY(0);
   }
   50% {
-    transform: translateY(-5px) rotate(1deg);
+    transform: translateY(-4px);
   }
 }
 
-@keyframes robo-head-walk {
+@keyframes pixel-left-step {
   0%,
   100% {
-    transform: rotate(-2deg);
+    transform: translateX(-2px);
   }
   50% {
-    transform: rotate(2deg);
+    transform: translateX(3px);
   }
 }
 
-@keyframes robo-left-step {
+@keyframes pixel-right-step {
   0%,
   100% {
-    transform: rotate(7deg);
+    transform: translateX(3px);
   }
   50% {
-    transform: rotate(-9deg);
+    transform: translateX(-2px);
   }
 }
 
-@keyframes robo-right-step {
+@keyframes pixel-robo-held {
   0%,
   100% {
-    transform: rotate(-9deg);
+    transform: rotate(-3deg) translateY(-2px);
   }
   50% {
-    transform: rotate(7deg);
-  }
-}
-
-@keyframes robo-held-wiggle {
-  0%,
-  100% {
-    transform: rotate(-4deg) translateY(-2px);
-  }
-  50% {
-    transform: rotate(4deg) translateY(-5px);
+    transform: rotate(3deg) translateY(-4px);
   }
 }
 

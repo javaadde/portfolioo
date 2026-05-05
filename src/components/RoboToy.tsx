@@ -20,10 +20,13 @@ type ChatMessage = {
 
 type RoboMode = "standing" | "walking" | "dragging";
 
-const ROBOT_SIZE = 136;
-const MOBILE_ROBOT_SIZE = 104;
+const ROBOT_SIZE = 96;
+const MOBILE_ROBOT_SIZE = 78;
 const EDGE_PADDING = 12;
-const DROP_PAUSE_MS = 11000;
+const DROP_PAUSE_MS = 12000;
+const MIN_STAND_MS = 10000;
+const MAX_STAND_MS = 15000;
+const COMMENT_DURATION_MS = 5000;
 const SCROLL_MESSAGE_COOLDOWN_MS = 12000;
 const INTRO_MESSAGE = "How can I help you, sir?";
 const SCROLL_MESSAGE = "hey where you going i think you realy need my help";
@@ -38,7 +41,7 @@ function getRobotSize() {
 }
 
 function getRobotHeight(size: number) {
-  return size * 1.28;
+  return size * 1.16;
 }
 
 function getBounds(size: number) {
@@ -52,8 +55,8 @@ function getBounds(size: number) {
 
 function getBottomRightPosition(size: number): Position {
   const { maxX, maxY } = getBounds(size);
-  const bottomGap = window.innerWidth < 640 ? 12 : 20;
-  const sideGap = window.innerWidth < 640 ? 10 : 22;
+  const bottomGap = window.innerWidth < 640 ? 14 : 24;
+  const sideGap = window.innerWidth < 640 ? 12 : 24;
 
   return {
     x: clamp(window.innerWidth - size - sideGap, EDGE_PADDING, maxX),
@@ -65,9 +68,19 @@ function getBottomRightPosition(size: number): Position {
   };
 }
 
+function getLowerLeftPosition(size: number): Position {
+  const { maxX, maxY } = getBounds(size);
+  const bottomLift = window.innerWidth < 640 ? 70 : 92;
+
+  return {
+    x: clamp(window.innerWidth < 640 ? 20 : 42, EDGE_PADDING, maxX),
+    y: clamp(maxY - bottomLift, EDGE_PADDING, maxY),
+  };
+}
+
 function getRandomWalkTarget(size: number): Position {
   const { maxX, maxY } = getBounds(size);
-  const topLimit = window.innerWidth < 640 ? 72 : 88;
+  const topLimit = window.innerWidth < 640 ? 82 : 98;
 
   return {
     x: clamp(EDGE_PADDING + Math.random() * maxX, EDGE_PADDING, maxX),
@@ -77,6 +90,10 @@ function getRandomWalkTarget(size: number): Position {
       maxY,
     ),
   };
+}
+
+function getStandDelay() {
+  return MIN_STAND_MS + Math.random() * (MAX_STAND_MS - MIN_STAND_MS);
 }
 
 function createPortfolioAnswer(question: string) {
@@ -95,7 +112,7 @@ function createPortfolioAnswer(question: string) {
   }
 
   if (/(project|work|case|portfolio)/.test(q)) {
-    return "Highlighted projects include Hayon, Trendzy, Lumiere Jewels, and Kido. They cover social media planning, ecommerce, product showcases, admin panels, UI/UX, and full-stack development.";
+    return "Highlighted projects include Hayon, Trendzy, Lumiere Jewels, and Kido: social media planning, ecommerce, product showcases, admin panels, UI/UX, and full-stack development.";
   }
 
   if (/(hayon|social|planning)/.test(q)) {
@@ -129,6 +146,8 @@ export default function RoboToy() {
   const [position, setPosition] = useState<Position | null>(null);
   const [mode, setMode] = useState<RoboMode>("standing");
   const [facing, setFacing] = useState(-1);
+  const [comment, setComment] = useState<string | null>(INTRO_MESSAGE);
+  const [chatOpen, setChatOpen] = useState(false);
   const [messages, setMessages] = useState<ChatMessage[]>([
     { from: "bot", text: INTRO_MESSAGE },
   ]);
@@ -136,19 +155,25 @@ export default function RoboToy() {
   const modeRef = useRef<RoboMode>("standing");
   const positionRef = useRef<Position | null>(null);
   const dragOffsetRef = useRef<Position>({ x: 0, y: 0 });
+  const pointerStartRef = useRef<Position | null>(null);
   const animationRef = useRef<number | null>(null);
   const roamTimerRef = useRef<number | null>(null);
+  const commentTimerRef = useRef<number | null>(null);
   const pausedUntilRef = useRef(0);
+  const firstWalkRef = useRef(true);
   const lastScrollMessageRef = useRef(0);
+  const scheduleWalkRef = useRef<(delay?: number) => void>(() => {});
 
-  const speak = useCallback((text: string) => {
-    setMessages((current) => [
-      ...current.slice(-4),
-      {
-        from: "bot",
-        text,
-      },
-    ]);
+  const showComment = useCallback((text: string) => {
+    setComment(text);
+
+    if (commentTimerRef.current) {
+      window.clearTimeout(commentTimerRef.current);
+    }
+
+    commentTimerRef.current = window.setTimeout(() => {
+      setComment(null);
+    }, COMMENT_DURATION_MS);
   }, []);
 
   useEffect(() => {
@@ -167,6 +192,7 @@ export default function RoboToy() {
     positionRef.current = initialPosition;
     initialFrame = window.requestAnimationFrame(() => {
       setPosition(initialPosition);
+      showComment(INTRO_MESSAGE);
     });
 
     const updateMode = (nextMode: RoboMode) => {
@@ -174,7 +200,7 @@ export default function RoboToy() {
       setMode(nextMode);
     };
 
-    const scheduleWalk = (delay = 2400 + Math.random() * 2600) => {
+    const scheduleWalk = (delay = getStandDelay()) => {
       if (roamTimerRef.current) window.clearTimeout(roamTimerRef.current);
 
       roamTimerRef.current = window.setTimeout(() => {
@@ -191,9 +217,14 @@ export default function RoboToy() {
 
         const currentSize = getRobotSize();
         const start = positionRef.current ?? getBottomRightPosition(currentSize);
-        const target = getRandomWalkTarget(currentSize);
+        const target = firstWalkRef.current
+          ? getLowerLeftPosition(currentSize)
+          : getRandomWalkTarget(currentSize);
+
+        firstWalkRef.current = false;
+
         const distance = Math.hypot(target.x - start.x, target.y - start.y);
-        const duration = clamp(distance * 14, 2800, 8200);
+        const duration = clamp(distance * 15, 3000, 9000);
         const startedAt = performance.now();
 
         if (animationRef.current) {
@@ -222,12 +253,14 @@ export default function RoboToy() {
           }
 
           updateMode("standing");
-          scheduleWalk(2800 + Math.random() * 4200);
+          scheduleWalk(getStandDelay());
         };
 
         animationRef.current = window.requestAnimationFrame(frame);
       }, delay);
     };
+
+    scheduleWalkRef.current = scheduleWalk;
 
     const handleScroll = () => {
       const now = Date.now();
@@ -236,7 +269,7 @@ export default function RoboToy() {
       }
 
       lastScrollMessageRef.current = now;
-      speak(SCROLL_MESSAGE);
+      showComment(SCROLL_MESSAGE);
     };
 
     const handleResize = () => {
@@ -254,7 +287,7 @@ export default function RoboToy() {
       setPosition(nextPosition);
     };
 
-    scheduleWalk(1800);
+    scheduleWalk(getStandDelay());
     window.addEventListener("scroll", handleScroll, { passive: true });
     window.addEventListener("resize", handleResize);
 
@@ -262,10 +295,11 @@ export default function RoboToy() {
       if (initialFrame) window.cancelAnimationFrame(initialFrame);
       if (animationRef.current) window.cancelAnimationFrame(animationRef.current);
       if (roamTimerRef.current) window.clearTimeout(roamTimerRef.current);
+      if (commentTimerRef.current) window.clearTimeout(commentTimerRef.current);
       window.removeEventListener("scroll", handleScroll);
       window.removeEventListener("resize", handleResize);
     };
-  }, [speak]);
+  }, [showComment]);
 
   useEffect(() => {
     const handlePointerMove = (event: PointerEvent) => {
@@ -282,11 +316,23 @@ export default function RoboToy() {
       setPosition(nextPosition);
     };
 
-    const handlePointerUp = () => {
+    const handlePointerUp = (event: PointerEvent) => {
       if (modeRef.current !== "dragging") return;
+
+      const pointerStart = pointerStartRef.current;
+      const moved = pointerStart
+        ? Math.hypot(event.clientX - pointerStart.x, event.clientY - pointerStart.y)
+        : 0;
+
       pausedUntilRef.current = Date.now() + DROP_PAUSE_MS;
       modeRef.current = "standing";
       setMode("standing");
+
+      if (moved < 7) {
+        setChatOpen((current) => !current);
+      }
+
+      scheduleWalkRef.current(DROP_PAUSE_MS + 300);
     };
 
     window.addEventListener("pointermove", handlePointerMove);
@@ -313,6 +359,7 @@ export default function RoboToy() {
     ]);
     setChatInput("");
     pausedUntilRef.current = Date.now() + DROP_PAUSE_MS;
+    scheduleWalkRef.current(DROP_PAUSE_MS + 300);
   };
 
   if (!position) return null;
@@ -320,7 +367,7 @@ export default function RoboToy() {
   const robotSize = getRobotSize();
   const isWalking = mode === "walking";
   const isDragging = mode === "dragging";
-  const chatAlignLeft = position.x < 190;
+  const chatAlignLeft = position.x < 200;
 
   return (
     <div
@@ -333,33 +380,41 @@ export default function RoboToy() {
         transform: `translate3d(${position.x}px, ${position.y}px, 0)`,
       }}
     >
-      <div className="robo-chat" aria-live="polite">
-        <div className="robo-chat-log">
-          {messages.slice(-4).map((message, index) => (
-            <p
-              key={`${message.from}-${index}-${message.text}`}
-              className={message.from === "user" ? "from-user" : "from-bot"}
-            >
-              {message.text}
-            </p>
-          ))}
+      {!chatOpen && comment ? (
+        <div className="robo-comment" aria-live="polite">
+          {comment}
         </div>
-        <form onSubmit={handleChatSubmit} className="robo-chat-form">
-          <input
-            value={chatInput}
-            onChange={(event) => setChatInput(event.target.value)}
-            placeholder="Ask about Javad..."
-            aria-label="Ask the portfolio assistant"
-          />
-          <button type="submit">Ask</button>
-        </form>
-      </div>
+      ) : null}
+
+      {chatOpen ? (
+        <div className="robo-chat" aria-live="polite">
+          <div className="robo-chat-log">
+            {messages.slice(-4).map((message, index) => (
+              <p
+                key={`${message.from}-${index}-${message.text}`}
+                className={message.from === "user" ? "from-user" : "from-bot"}
+              >
+                {message.text}
+              </p>
+            ))}
+          </div>
+          <form onSubmit={handleChatSubmit} className="robo-chat-form">
+            <input
+              value={chatInput}
+              onChange={(event) => setChatInput(event.target.value)}
+              placeholder="Ask about Javad..."
+              aria-label="Ask the portfolio assistant"
+            />
+            <button type="submit">Ask</button>
+          </form>
+        </div>
+      ) : null}
 
       <div
         role="button"
-        aria-label="Drag the little chibi character"
+        aria-label="Open or drag the pixel robot assistant"
         tabIndex={0}
-        data-cursor-label={isDragging ? "Drop Me" : "Grab Me"}
+        data-cursor-label={isDragging ? "Drop Me" : "Ask Me"}
         data-cursor-type="social-btn"
         onPointerDown={(event) => {
           const target = event.currentTarget;
@@ -367,6 +422,7 @@ export default function RoboToy() {
 
           event.preventDefault();
           target.setPointerCapture(event.pointerId);
+          pointerStartRef.current = { x: event.clientX, y: event.clientY };
           dragOffsetRef.current = {
             x: event.clientX - rect.left,
             y: event.clientY - rect.top,
@@ -385,6 +441,12 @@ export default function RoboToy() {
         onKeyDown={(event) => {
           const current = positionRef.current;
           if (!current) return;
+
+          if (event.key === "Enter" || event.key === " ") {
+            event.preventDefault();
+            setChatOpen((currentValue) => !currentValue);
+            return;
+          }
 
           const step = event.shiftKey ? 32 : 16;
           const size = getRobotSize();
@@ -408,9 +470,10 @@ export default function RoboToy() {
             };
             setPosition(positionRef.current);
             pausedUntilRef.current = Date.now() + DROP_PAUSE_MS;
+            scheduleWalkRef.current(DROP_PAUSE_MS + 300);
           }
         }}
-        className="robo-toy touch-none outline-none transition-[filter] duration-300 focus-visible:drop-shadow-[0_0_0.75rem_rgba(0,96,84,0.45)]"
+        className="robo-toy pixel-robo-toy touch-none outline-none transition-[filter] duration-300 focus-visible:drop-shadow-[0_0_0.75rem_rgba(0,96,84,0.45)]"
         style={{
           width: robotSize,
           height: getRobotHeight(robotSize),
@@ -419,366 +482,56 @@ export default function RoboToy() {
         }}
       >
         <svg
-          viewBox="0 0 180 230"
+          viewBox="0 0 96 112"
           aria-hidden="true"
-          className={`h-full w-full overflow-visible drop-shadow-[0_10px_14px_rgba(0,0,0,0.16)] ${
+          shapeRendering="crispEdges"
+          className={`pixel-robot h-full w-full overflow-visible drop-shadow-[0_12px_0_rgba(0,0,0,0.08)] ${
             isWalking ? "robo-toy-walk" : ""
           } ${isDragging ? "robo-toy-held" : ""}`}
         >
-          <defs>
-            <linearGradient id="mascot-hair" x1="0.1" x2="0.9" y1="0" y2="1">
-              <stop offset="0%" stopColor="#263b46" />
-              <stop offset="45%" stopColor="#0d0d0d" />
-              <stop offset="100%" stopColor="#111921" />
-            </linearGradient>
-            <linearGradient id="mascot-robe" x1="0" x2="1" y1="0" y2="1">
-              <stop offset="0%" stopColor="#273047" />
-              <stop offset="100%" stopColor="#121525" />
-            </linearGradient>
-            <linearGradient id="mascot-panel" x1="0" x2="1" y1="0" y2="1">
-              <stop offset="0%" stopColor="#21422f" />
-              <stop offset="100%" stopColor="#0e2d22" />
-            </linearGradient>
-            <linearGradient id="mascot-eye" x1="0" x2="1" y1="0" y2="1">
-              <stop offset="0%" stopColor="#6d5731" />
-              <stop offset="100%" stopColor="#21170e" />
-            </linearGradient>
-          </defs>
+          <g className="pixel-robot-core">
+            <rect x="37" y="71" width="25" height="24" fill="#111111" />
+            <rect x="43" y="77" width="18" height="13" fill="#b9ad82" />
+            <rect x="47" y="78" width="16" height="12" fill="#fff8b9" />
 
-          <g className="robo-toy-body" vectorEffect="non-scaling-stroke">
-            <ellipse cx="91" cy="218" rx="42" ry="7" fill="rgba(0,0,0,0.12)" />
+            <rect
+              className="pixel-leg-left"
+              x="42"
+              y="94"
+              width="6"
+              height="12"
+              fill="#121212"
+            />
+            <rect
+              className="pixel-leg-right"
+              x="58"
+              y="94"
+              width="6"
+              height="12"
+              fill="#121212"
+            />
+            <rect x="38" y="102" width="8" height="5" fill="#101010" />
+            <rect x="58" y="102" width="8" height="5" fill="#101010" />
 
-            <path
-              d="M43 92 C29 116 28 139 42 153 C30 159 24 169 18 181 C33 178 47 170 58 158 L54 108 Z"
-              fill="#0d0d0d"
-              stroke="#070707"
-              strokeWidth="4"
-              strokeLinejoin="round"
-            />
-            <path
-              d="M135 91 C153 114 153 139 138 154 C153 161 161 173 166 186 C147 181 132 170 121 157 L126 108 Z"
-              fill="#0d0d0d"
-              stroke="#070707"
-              strokeWidth="4"
-              strokeLinejoin="round"
-            />
+            <rect x="13" y="25" width="20" height="42" fill="#101010" />
+            <rect x="18" y="16" width="25" height="54" fill="#b7ad83" />
+            <rect x="18" y="16" width="11" height="54" fill="#d8cea1" />
+            <rect x="18" y="16" width="25" height="8" fill="#cfc494" />
+            <rect x="10" y="36" width="8" height="23" fill="#101010" />
+            <rect x="18" y="39" width="12" height="17" fill="#ede8bd" />
 
-            <g
-              className="robo-toy-legs"
-              fill="#171a2b"
-              stroke="#070707"
-              strokeWidth="4"
-              strokeLinejoin="round"
-            >
-              <path
-                className="robo-leg-left"
-                d="M65 174 C58 186 57 204 65 211 C74 216 85 210 84 198 L82 174 Z"
-              />
-              <path
-                className="robo-leg-right"
-                d="M95 174 C105 187 107 204 99 211 C90 216 79 210 81 198 L82 174 Z"
-              />
-            </g>
-            <path
-              d="M64 207 C55 211 52 216 58 220 C70 222 82 218 86 211"
-              fill="#f8f5ee"
-              stroke="#070707"
-              strokeWidth="3"
-              strokeLinejoin="round"
-            />
-            <path
-              d="M95 207 C105 211 109 216 103 220 C91 222 80 218 77 211"
-              fill="#f8f5ee"
-              stroke="#070707"
-              strokeWidth="3"
-              strokeLinejoin="round"
-            />
-            <path
-              d="M58 218 C66 213 75 213 83 216"
-              fill="none"
-              stroke="#8d2921"
-              strokeWidth="3"
-              strokeLinecap="round"
-            />
-            <path
-              d="M79 216 C88 213 97 214 104 218"
-              fill="none"
-              stroke="#8d2921"
-              strokeWidth="3"
-              strokeLinecap="round"
-            />
-
-            <path
-              d="M53 124 C43 140 44 163 55 179 C66 185 94 186 112 179 C123 162 122 139 108 124 Z"
-              fill="url(#mascot-robe)"
-              stroke="#070707"
-              strokeWidth="4.4"
-              strokeLinejoin="round"
-            />
-            <path
-              d="M70 122 L93 142 L74 179 L54 165 C53 150 58 135 70 122 Z"
-              fill="#222944"
-              stroke="#070707"
-              strokeWidth="3.2"
-              strokeLinejoin="round"
-            />
-            <path
-              d="M96 123 L78 143 L106 178 L119 164 C119 147 112 133 96 123 Z"
-              fill="#171b31"
-              stroke="#070707"
-              strokeWidth="3.2"
-              strokeLinejoin="round"
-            />
-            <path
-              d="M70 126 C76 135 85 141 95 144"
-              fill="none"
-              stroke="#65708f"
-              strokeWidth="3"
-              strokeLinecap="round"
-              opacity="0.9"
-            />
-            <path
-              d="M74 152 C83 159 92 163 104 163"
-              fill="none"
-              stroke="#65708f"
-              strokeWidth="2.7"
-              strokeLinecap="round"
-              opacity="0.8"
-            />
-
-            <path
-              d="M91 139 L123 139 L123 181 L72 181 L72 151 Z"
-              fill="url(#mascot-panel)"
-              stroke="#a17925"
-              strokeWidth="4"
-              strokeLinejoin="round"
-            />
-            <path
-              d="M91 139 V181"
-              stroke="#a17925"
-              strokeWidth="3"
-              strokeLinecap="round"
-            />
-            <path
-              d="M72 158 H123"
-              stroke="#a17925"
-              strokeWidth="3"
-              strokeLinecap="round"
-            />
-            <path
-              d="M103 144 L114 177"
-              stroke="#b9d4bd"
-              strokeWidth="7"
-              strokeLinecap="round"
-              opacity="0.55"
-            />
-            <path
-              d="M122 151 C132 149 139 151 146 156"
-              fill="none"
-              stroke="#a17925"
-              strokeWidth="4"
-              strokeLinecap="round"
-            />
-            <path
-              d="M144 151 L150 145"
-              stroke="#a17925"
-              strokeWidth="3"
-              strokeLinecap="round"
-            />
-            <path
-              d="M145 157 L152 162"
-              stroke="#a17925"
-              strokeWidth="3"
-              strokeLinecap="round"
-            />
-
-            <path
-              d="M48 136 C38 149 38 169 49 177 C58 176 61 165 58 154 L60 136 Z"
-              fill="#1e243c"
-              stroke="#070707"
-              strokeWidth="4"
-              strokeLinejoin="round"
-            />
-            <path
-              d="M50 174 C53 181 61 181 64 174 C61 168 54 166 50 174 Z"
-              fill="#f5d6cc"
-              stroke="#070707"
-              strokeWidth="2.8"
-              strokeLinejoin="round"
-            />
-            <path
-              d="M112 134 C128 146 132 165 121 176 C110 176 104 167 106 155 Z"
-              fill="#1e243c"
-              stroke="#070707"
-              strokeWidth="4"
-              strokeLinejoin="round"
-            />
-            <path
-              d="M77 142 C83 137 91 139 94 147 C90 153 80 154 75 148 C73 145 74 143 77 142 Z"
-              fill="#f5d6cc"
-              stroke="#070707"
-              strokeWidth="2.8"
-              strokeLinejoin="round"
-            />
-            <path
-              d="M82 144 C86 144 90 146 92 149"
-              fill="none"
-              stroke="#d99b93"
-              strokeWidth="2"
-              strokeLinecap="round"
-            />
-
-            <g className="robo-head">
-              <path
-                d="M82 10 C94 0 115 3 123 16 C130 28 124 43 110 47 C94 51 79 43 76 30 C74 21 76 14 82 10 Z"
-                fill="url(#mascot-hair)"
-                stroke="#070707"
-                strokeWidth="4.2"
-                strokeLinejoin="round"
-              />
-              <path
-                d="M22 76 C17 49 29 29 53 19 C77 9 114 15 133 36 C150 55 150 90 132 110 C115 128 75 132 47 119 C28 110 20 94 22 76 Z"
-                fill="#f4d6c9"
-                stroke="#070707"
-                strokeWidth="4.5"
-                strokeLinejoin="round"
-              />
-              <path
-                d="M30 77 C25 53 35 33 56 24 C82 13 120 20 139 45 C130 36 116 31 99 30 C76 29 57 36 46 51 L40 80 C35 80 32 79 30 77 Z"
-                fill="url(#mascot-hair)"
-                stroke="#070707"
-                strokeWidth="4.4"
-                strokeLinejoin="round"
-              />
-              <path
-                d="M136 67 C144 62 153 68 152 80 C151 92 142 101 134 98 C129 95 130 75 136 67 Z"
-                fill="#f4d6c9"
-                stroke="#070707"
-                strokeWidth="3.8"
-                strokeLinejoin="round"
-              />
-              <circle cx="142" cy="94" r="4.3" fill="#222050" />
-              <path
-                d="M123 38 C137 51 139 75 131 97 C124 114 111 124 95 129 C105 109 108 86 104 65 C101 50 95 41 87 35 Z"
-                fill="#0d0d0d"
-                stroke="#070707"
-                strokeWidth="4.2"
-                strokeLinejoin="round"
-              />
-              <path
-                d="M106 30 C109 50 108 72 102 91"
-                fill="none"
-                stroke="#344852"
-                strokeWidth="4.5"
-                strokeLinecap="round"
-                opacity="0.8"
-              />
-              <path
-                d="M75 25 C72 42 72 58 76 73"
-                fill="none"
-                stroke="#344852"
-                strokeWidth="3.6"
-                strokeLinecap="round"
-                opacity="0.75"
-              />
-              <path
-                d="M91 23 C91 42 89 59 84 77"
-                fill="none"
-                stroke="#344852"
-                strokeWidth="3.6"
-                strokeLinecap="round"
-                opacity="0.75"
-              />
-              <path
-                d="M52 27 C48 43 47 58 50 72"
-                fill="none"
-                stroke="#344852"
-                strokeWidth="3"
-                strokeLinecap="round"
-                opacity="0.7"
-              />
-              <path
-                d="M32 98 C24 110 15 116 5 119 C19 122 35 116 47 103 Z"
-                fill="#0d0d0d"
-                stroke="#070707"
-                strokeWidth="4"
-                strokeLinejoin="round"
-              />
-              <path
-                d="M129 98 C139 111 149 117 163 120 C145 124 130 117 118 103 Z"
-                fill="#0d0d0d"
-                stroke="#070707"
-                strokeWidth="4"
-                strokeLinejoin="round"
-              />
-              <path
-                d="M116 36 C113 60 109 85 99 105"
-                fill="none"
-                stroke="#5d7780"
-                strokeWidth="5"
-                strokeLinecap="round"
-                opacity="0.65"
-              />
-
-              <path
-                d="M48 88 C59 81 72 80 84 84"
-                fill="none"
-                stroke="#070707"
-                strokeWidth="3.6"
-                strokeLinecap="round"
-              />
-              <path
-                d="M96 84 C108 80 121 82 132 88"
-                fill="none"
-                stroke="#070707"
-                strokeWidth="3.6"
-                strokeLinecap="round"
-              />
-              <path
-                d="M48 94 C59 90 74 90 83 95 C78 104 67 109 55 106 C49 103 47 99 48 94 Z"
-                fill="#f7f3ed"
-                stroke="#070707"
-                strokeWidth="3"
-                strokeLinejoin="round"
-              />
-              <path
-                d="M97 95 C108 90 123 91 132 96 C127 105 115 109 104 106 C99 103 96 99 97 95 Z"
-                fill="#f7f3ed"
-                stroke="#070707"
-                strokeWidth="3"
-                strokeLinejoin="round"
-              />
-              <path
-                d="M59 94 C65 92 75 93 80 96 C75 101 67 103 59 101 Z"
-                fill="url(#mascot-eye)"
-              />
-              <path
-                d="M107 95 C115 92 124 94 129 97 C124 102 115 103 108 101 Z"
-                fill="url(#mascot-eye)"
-              />
-              <path
-                d="M49 91 C59 90 71 91 84 95"
-                fill="none"
-                stroke="#070707"
-                strokeWidth="2.6"
-                strokeLinecap="round"
-              />
-              <path
-                d="M97 95 C108 91 121 92 133 96"
-                fill="none"
-                stroke="#070707"
-                strokeWidth="2.6"
-                strokeLinecap="round"
-              />
-              <path
-                d="M76 114 C85 119 96 119 104 114"
-                fill="none"
-                stroke="#6d3a35"
-                strokeWidth="2.4"
-                strokeLinecap="round"
-              />
-              <circle cx="37" cy="94" r="3.2" fill="#222050" />
-            </g>
+            <rect x="31" y="12" width="56" height="56" fill="#101010" />
+            <rect x="38" y="20" width="41" height="40" fill="#2d6b5d" />
+            <rect x="38" y="20" width="41" height="7" fill="#3e8372" />
+            <rect x="39" y="54" width="39" height="6" fill="#245a4d" />
+            <rect x="46" y="39" width="7" height="7" fill="#e6e779" />
+            <rect x="70" y="39" width="7" height="7" fill="#e6e779" />
+            <rect x="55" y="50" width="6" height="8" fill="#e6e779" />
+            <rect x="61" y="56" width="16" height="5" fill="#e6e779" />
+            <rect x="77" y="50" width="5" height="11" fill="#e6e779" />
+            <rect x="40" y="24" width="35" height="4" fill="#0c2e29" />
+            <rect x="78" y="21" width="3" height="37" fill="#8fb9a5" />
+            <rect x="39" y="58" width="38" height="3" fill="#8fb9a5" />
           </g>
         </svg>
       </div>
