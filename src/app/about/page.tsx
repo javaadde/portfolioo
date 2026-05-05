@@ -4,6 +4,7 @@ import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
 import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
+import RoboToy from "@/components/RoboToy";
 
 function AnimatedBlock({
   children,
@@ -56,6 +57,7 @@ export default function About() {
     <div className="relative min-h-screen px-6 md:px-12 lg:px-16 pt-28 md:pt-36 pb-24">
       {/* VIGNETTE */}
       <div className="vignette-glow" />
+      <RoboToy variant="peek" />
 
       {/* GRID BG */}
       <div className="fixed inset-0 pointer-events-none z-[0]">

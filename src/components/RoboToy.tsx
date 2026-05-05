@@ -19,6 +19,7 @@ type ChatMessage = {
 };
 
 type RoboMode = "standing" | "walking" | "dragging";
+type RoboVariant = "home" | "peek";
 
 const ROBOT_SIZE = 96;
 const MOBILE_ROBOT_SIZE = 78;
@@ -28,8 +29,11 @@ const MIN_STAND_MS = 10000;
 const MAX_STAND_MS = 15000;
 const COMMENT_DURATION_MS = 5000;
 const SCROLL_MESSAGE_COOLDOWN_MS = 12000;
-const INTRO_MESSAGE = "How can I help you, sir?";
+const INTRO_MESSAGE =
+  "Hey, Kuttu here to help. What do you need to know about Javad?";
 const SCROLL_MESSAGE = "hey where you going i think you realy need my help";
+const PEEK_MESSAGE = "shhhhh!. did you need my help?";
+const PEEK_DELAY_MS = 5000;
 
 function clamp(value: number, min: number, max: number) {
   return Math.min(Math.max(value, min), max);
@@ -92,6 +96,25 @@ function getRandomWalkTarget(size: number): Position {
   };
 }
 
+function getRandomPeekPosition(size: number): Position {
+  const height = getRobotHeight(size);
+  const side = Math.random() > 0.5 ? "right" : "left";
+  const verticalSlots = [
+    EDGE_PADDING + 72,
+    window.innerHeight * 0.46 - height * 0.5,
+    window.innerHeight - height - 72,
+  ];
+  const y = verticalSlots[Math.floor(Math.random() * verticalSlots.length)];
+
+  return {
+    x:
+      side === "right"
+        ? window.innerWidth - size * 0.48
+        : -size * 0.52,
+    y: clamp(y, EDGE_PADDING + 64, window.innerHeight - height - EDGE_PADDING),
+  };
+}
+
 function getStandDelay() {
   return MIN_STAND_MS + Math.random() * (MAX_STAND_MS - MIN_STAND_MS);
 }
@@ -99,8 +122,16 @@ function getStandDelay() {
 function createPortfolioAnswer(question: string) {
   const q = question.toLowerCase();
 
+  if (
+    /(kuttu|your name|ur name|robot name|assistant name|who are you|what are you)/.test(
+      q,
+    )
+  ) {
+    return "My name is Kuttu. I am Javad's little pixel assistant, here to help you explore his portfolio.";
+  }
+
   if (/(hello|hi|hey|help)/.test(q)) {
-    return "I can help with Javad's portfolio, projects, skills, contact, and availability.";
+    return "Hey, Kuttu here. I can help with Javad's portfolio, projects, skills, contact, and availability.";
   }
 
   if (/(who|owner|javad|about|bio|profile)/.test(q)) {
@@ -142,11 +173,13 @@ function createPortfolioAnswer(question: string) {
   return "I can only answer about this portfolio and Javad. Ask me about projects, skills, contact, location, or availability.";
 }
 
-export default function RoboToy() {
+export default function RoboToy({ variant = "home" }: { variant?: RoboVariant }) {
   const [position, setPosition] = useState<Position | null>(null);
   const [mode, setMode] = useState<RoboMode>("standing");
-  const [facing, setFacing] = useState(-1);
-  const [comment, setComment] = useState<string | null>(INTRO_MESSAGE);
+  const [facing, setFacing] = useState(1);
+  const [comment, setComment] = useState<string | null>(
+    variant === "home" ? INTRO_MESSAGE : null,
+  );
   const [chatOpen, setChatOpen] = useState(false);
   const [messages, setMessages] = useState<ChatMessage[]>([
     { from: "bot", text: INTRO_MESSAGE },
@@ -158,6 +191,7 @@ export default function RoboToy() {
   const pointerStartRef = useRef<Position | null>(null);
   const animationRef = useRef<number | null>(null);
   const roamTimerRef = useRef<number | null>(null);
+  const peekTimerRef = useRef<number | null>(null);
   const commentTimerRef = useRef<number | null>(null);
   const pausedUntilRef = useRef(0);
   const firstWalkRef = useRef(true);
@@ -185,6 +219,39 @@ export default function RoboToy() {
   }, [position]);
 
   useEffect(() => {
+    if (variant === "peek") {
+      const size = getRobotSize();
+      const hiddenPosition = {
+        x: window.innerWidth + size,
+        y: window.innerHeight * 0.5,
+      };
+
+      positionRef.current = hiddenPosition;
+
+      peekTimerRef.current = window.setTimeout(() => {
+        const nextPosition = getRandomPeekPosition(getRobotSize());
+        positionRef.current = nextPosition;
+        setPosition(nextPosition);
+        setFacing(nextPosition.x < 0 ? 1 : -1);
+        showComment(PEEK_MESSAGE);
+      }, PEEK_DELAY_MS);
+
+      const handleResize = () => {
+        const nextPosition = getRandomPeekPosition(getRobotSize());
+        positionRef.current = nextPosition;
+        setPosition(nextPosition);
+        setFacing(nextPosition.x < 0 ? 1 : -1);
+      };
+
+      window.addEventListener("resize", handleResize);
+
+      return () => {
+        if (peekTimerRef.current) window.clearTimeout(peekTimerRef.current);
+        if (commentTimerRef.current) window.clearTimeout(commentTimerRef.current);
+        window.removeEventListener("resize", handleResize);
+      };
+    }
+
     const size = getRobotSize();
     const initialPosition = getBottomRightPosition(size);
     let initialFrame = 0;
@@ -299,7 +366,7 @@ export default function RoboToy() {
       window.removeEventListener("scroll", handleScroll);
       window.removeEventListener("resize", handleResize);
     };
-  }, [showComment]);
+  }, [showComment, variant]);
 
   useEffect(() => {
     const handlePointerMove = (event: PointerEvent) => {
@@ -332,7 +399,9 @@ export default function RoboToy() {
         setChatOpen((current) => !current);
       }
 
-      scheduleWalkRef.current(DROP_PAUSE_MS + 300);
+      if (variant === "home") {
+        scheduleWalkRef.current(DROP_PAUSE_MS + 300);
+      }
     };
 
     window.addEventListener("pointermove", handlePointerMove);
@@ -359,7 +428,9 @@ export default function RoboToy() {
     ]);
     setChatInput("");
     pausedUntilRef.current = Date.now() + DROP_PAUSE_MS;
-    scheduleWalkRef.current(DROP_PAUSE_MS + 300);
+    if (variant === "home") {
+      scheduleWalkRef.current(DROP_PAUSE_MS + 300);
+    }
   };
 
   if (!position) return null;
@@ -368,12 +439,13 @@ export default function RoboToy() {
   const isWalking = mode === "walking";
   const isDragging = mode === "dragging";
   const chatAlignLeft = position.x < 200;
+  const isPeek = variant === "peek";
 
   return (
     <div
       className={`robo-assistant fixed left-0 top-0 z-[80] ${
         chatAlignLeft ? "chat-left" : ""
-      }`}
+      } ${isPeek ? "robo-peek" : ""}`}
       style={{
         width: robotSize,
         height: getRobotHeight(robotSize),
@@ -412,7 +484,7 @@ export default function RoboToy() {
 
       <div
         role="button"
-        aria-label="Open or drag the pixel robot assistant"
+        aria-label="Open or drag Kuttu, the pixel robot assistant"
         tabIndex={0}
         data-cursor-label={isDragging ? "Drop Me" : "Ask Me"}
         data-cursor-type="social-btn"
@@ -470,15 +542,19 @@ export default function RoboToy() {
             };
             setPosition(positionRef.current);
             pausedUntilRef.current = Date.now() + DROP_PAUSE_MS;
-            scheduleWalkRef.current(DROP_PAUSE_MS + 300);
+            if (variant === "home") {
+              scheduleWalkRef.current(DROP_PAUSE_MS + 300);
+            }
           }
         }}
-        className="robo-toy pixel-robo-toy touch-none outline-none transition-[filter] duration-300 focus-visible:drop-shadow-[0_0_0.75rem_rgba(0,96,84,0.45)]"
+      className={`robo-toy pixel-robo-toy touch-none outline-none transition-[filter] duration-300 focus-visible:drop-shadow-[0_0_0.75rem_rgba(0,96,84,0.45)] ${
+          isWalking && facing > 0 ? "walk-right" : ""
+        } ${isWalking && facing < 0 ? "walk-left" : ""}`}
         style={{
           width: robotSize,
           height: getRobotHeight(robotSize),
           cursor: isDragging ? "grabbing" : "grab",
-          transform: `scaleX(${facing})`,
+          transform: `scaleX(${isWalking ? facing : 1})`,
         }}
       >
         <svg
