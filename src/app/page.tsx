@@ -12,6 +12,7 @@ import {
 } from "lucide-react";
 import { ScrambleText } from "@/components/ScrambleText";
 import PixelLoadingPreview from "@/components/PixelLoadingPreview";
+import ProjectBrandMark from "@/components/ProjectBrandMark";
 import InitialsLogo from "@/components/InitialsLogo";
 import RoboToy from "@/components/RoboToy";
 import { selectedProjects } from "@/data/selectedProjects";
@@ -427,56 +428,43 @@ export default function Home() {
         {/* Project Cards */}
         {selectedProjects.map((project, i) => (
           <AnimatedSection key={project.id} delay={i * 0.1}>
-            <div className="relative border-t border-black/[0.05] py-10 sm:py-12 md:py-20">
-              <div className="relative z-10 grid grid-cols-1 gap-5 border border-black/[0.05] px-5 py-6 md:grid-cols-12 md:items-start md:gap-x-10 md:gap-y-4 md:px-8 md:py-7 lg:gap-x-14">
+            <div className="relative border-t border-black/[0.05] py-8 sm:py-12 md:py-20">
+              <div className="relative z-10 grid grid-cols-1 gap-5 overflow-hidden border border-black/[0.06] bg-white/[0.24] px-4 py-5 shadow-[0_18px_60px_rgba(0,0,0,0.035)] backdrop-blur-sm sm:px-5 sm:py-6 md:grid-cols-12 md:items-start md:gap-x-10 md:gap-y-4 md:bg-transparent md:px-8 md:py-7 md:shadow-none md:backdrop-blur-0 lg:gap-x-14">
                 <span className="corner-plus tl" />
                 <span className="corner-plus tr" />
                 <span className="corner-plus bl" />
                 <span className="corner-plus br" />
 
-                <div className="md:col-span-2">
-                  <span className="font-mono text-[10px] tracking-[0.3em] text-black/20 block">
+                <div className="flex items-center justify-between gap-4 md:col-span-2 md:block">
+                  <span className="block font-mono text-[10px] tracking-[0.3em] text-black/20">
                     [{project.id}]
                   </span>
+                  <div className="flex items-center gap-3 md:mt-5 md:block">
+                    {project.slug === "hayon" ? (
+                      <ProjectBrandMark
+                        slug={project.slug}
+                        className="h-8 w-8 md:h-10 md:w-10"
+                      />
+                    ) : null}
+                    <span className="font-mono text-[9px] uppercase tracking-[0.22em] text-accent/70 md:hidden">
+                      {project.year}
+                    </span>
+                  </div>
                 </div>
 
                 <div className="md:col-span-4">
-                  <h3 className="max-w-[13ch] text-[1.8rem] font-semibold leading-[0.98] tracking-tight text-black/85 font-heading md:text-[clamp(1.85rem,3vw,2.45rem)]">
+                  <h3 className="max-w-[12ch] text-[2.15rem] font-semibold leading-[0.9] tracking-[-0.045em] text-black/85 font-heading sm:max-w-[13ch] md:text-[clamp(1.85rem,3vw,2.45rem)] md:leading-[0.98] md:tracking-tight">
                     <ScrambleText text={`${project.title}.`} />
                   </h3>
-                  <span className="mt-3 block font-mono text-[9px] uppercase tracking-[0.22em] text-black/25">
+                  <span className="mt-3 block border-l border-accent/45 pl-3 font-mono text-[9px] uppercase tracking-[0.22em] text-black/35 md:border-0 md:pl-0 md:text-black/25">
                     {project.category} · {project.year}
                   </span>
                 </div>
 
                 <div className="md:col-span-6">
-                  <p className="max-w-[34rem] font-mono text-[11px] leading-[1.65] uppercase tracking-[0.04em] text-black/48 md:text-[12px]">
+                  <p className="max-w-[34rem] border-t border-black/[0.05] pt-4 font-mono text-[11px] leading-[1.75] uppercase tracking-[0.035em] text-black/50 md:border-0 md:pt-0 md:text-[12px] md:leading-[1.65] md:tracking-[0.04em] md:text-black/48">
                     {project.description}
                   </p>
-                  {project.liveUrl || project.githubUrl ? (
-                    <div className="mt-4 flex flex-wrap items-center gap-x-5 gap-y-2">
-                      {project.liveUrl ? (
-                        <a
-                          href={project.liveUrl}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="font-mono text-[10px] uppercase tracking-[0.2em] text-black/35 transition-colors duration-300 hover:text-black"
-                        >
-                          Live Site
-                        </a>
-                      ) : null}
-                      {project.githubUrl ? (
-                        <a
-                          href={project.githubUrl}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="font-mono text-[10px] uppercase tracking-[0.2em] text-black/35 transition-colors duration-300 hover:text-black"
-                        >
-                          GitHub Repo
-                        </a>
-                      ) : null}
-                    </div>
-                  ) : null}
                 </div>
               </div>
 

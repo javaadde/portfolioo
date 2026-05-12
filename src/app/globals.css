@@ -46,7 +46,7 @@ html {
 .cursor-active a,
 .cursor-active button,
 .cursor-active [role="button"] {
-  cursor: none !important;
+  cursor: pointer !important;
 }
 
 /* ===== GRID BACKGROUND ===== */

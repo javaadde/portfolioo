@@ -107,7 +107,7 @@ export default function PixelLoadingPreview({
   return (
     <div
       ref={previewRef}
-      className="relative mx-auto mt-8 w-full max-w-[1240px] border border-black/[0.06] bg-[#f1f0ec] md:mt-14"
+      className="relative mx-auto mt-4 w-[calc(100%-1rem)] max-w-[1240px] border border-black/[0.06] bg-[#f1f0ec] shadow-[0_18px_50px_rgba(0,0,0,0.055)] md:mt-14 md:w-full md:shadow-none"
     >
       <span className="corner-cross tl" />
       <span className="corner-cross tr" />
@@ -116,7 +116,7 @@ export default function PixelLoadingPreview({
 
       <div
         ref={imageFrameRef}
-        className="group/image relative aspect-[16/11] overflow-hidden md:aspect-[16/5]"
+        className="group/image relative aspect-[4/3] overflow-hidden sm:aspect-[16/11] md:aspect-[16/5]"
       >
         <Image
           src={src}
@@ -139,10 +139,17 @@ export default function PixelLoadingPreview({
         ) : null}
 
         <div className="pointer-events-none absolute inset-0 z-10 flex items-center justify-center bg-black/0 transition-colors duration-300 group-hover/image:bg-black/[0.18]">
-          <span className="translate-y-2 border border-white/35 bg-black/70 px-5 py-3 font-mono text-[10px] font-semibold uppercase tracking-[0.22em] text-white opacity-0 backdrop-blur-md transition-all duration-300 group-hover/image:translate-y-0 group-hover/image:opacity-100">
+          <span className="hidden translate-y-2 border border-white/35 bg-black/70 px-5 py-3 font-mono text-[10px] font-semibold uppercase tracking-[0.22em] text-white opacity-0 backdrop-blur-md transition-all duration-300 group-hover/image:translate-y-0 group-hover/image:opacity-100 md:inline-flex">
             View Details
           </span>
         </div>
+
+        {href ? (
+          <div className="pointer-events-none absolute inset-x-3 bottom-3 z-20 flex items-center justify-between border border-white/25 bg-black/65 px-3 py-2 font-mono text-[9px] font-semibold uppercase tracking-[0.2em] text-white/90 backdrop-blur-md md:hidden">
+            <span>Case Study</span>
+            <span>Tap</span>
+          </div>
+        ) : null}
 
         <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(to_right,rgba(0,0,0,0.03)_1px,transparent_1px)] bg-[size:12.5%_100%] opacity-35" />
 
