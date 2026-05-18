@@ -61,6 +61,8 @@ export const selectedProjects: SelectedProject[] = [
     description:
       "A modern ecommerce website for a men's dress shop, designed with a clean shopping flow, polished product presentation, and sharp UI/UX details.",
     year: "2026",
+    liveUrl: "https://trendzy-javad.vercel.app/",
+    githubUrl: "https://github.com/javaadde/trendzy.frontend",
     previewImage: projectTwoPreview,
     timeline: "2026",
     projectType: "Fashion ecommerce",

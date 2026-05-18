@@ -138,12 +138,6 @@ export default function PixelLoadingPreview({
           />
         ) : null}
 
-        <div className="pointer-events-none absolute inset-0 z-10 flex items-center justify-center bg-black/0 transition-colors duration-300 group-hover/image:bg-black/[0.18]">
-          <span className="hidden translate-y-2 border border-white/35 bg-black/70 px-5 py-3 font-mono text-[10px] font-semibold uppercase tracking-[0.22em] text-white opacity-0 backdrop-blur-md transition-all duration-300 group-hover/image:translate-y-0 group-hover/image:opacity-100 md:inline-flex">
-            View Details
-          </span>
-        </div>
-
         {href ? (
           <div className="pointer-events-none absolute inset-x-3 bottom-3 z-20 flex items-center justify-between border border-white/25 bg-black/65 px-3 py-2 font-mono text-[9px] font-semibold uppercase tracking-[0.2em] text-white/90 backdrop-blur-md md:hidden">
             <span>Case Study</span>

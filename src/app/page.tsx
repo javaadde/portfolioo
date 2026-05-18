@@ -440,7 +440,7 @@ export default function Home() {
                     [{project.id}]
                   </span>
                   <div className="flex items-center gap-3 md:mt-5 md:block">
-                    {project.slug === "hayon" ? (
+                    {["hayon", "trendzy"].includes(project.slug) ? (
                       <ProjectBrandMark
                         slug={project.slug}
                         className="h-8 w-8 md:h-10 md:w-10"

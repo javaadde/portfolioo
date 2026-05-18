@@ -1,5 +1,6 @@
 import Image from "next/image";
 import hayonLogo from "@/assets/project-logos/hayon.webp";
+import trendzyLogo from "@/assets/project-logos/trendzy.png";
 
 type ProjectBrandMarkProps = {
   slug: string;
@@ -10,7 +11,19 @@ export default function ProjectBrandMark({
   slug,
   className = "",
 }: ProjectBrandMarkProps) {
-  if (slug !== "hayon") {
+  const logos = {
+    hayon: {
+      src: hayonLogo,
+      alt: "Hayon logo",
+    },
+    trendzy: {
+      src: trendzyLogo,
+      alt: "Trendzy logo",
+    },
+  } as const;
+  const logo = logos[slug as keyof typeof logos];
+
+  if (!logo) {
     return (
       <div
         aria-hidden="true"
@@ -25,8 +38,8 @@ export default function ProjectBrandMark({
   return (
     <div className={`relative overflow-hidden ${className}`}>
       <Image
-        src={hayonLogo}
-        alt="Hayon logo"
+        src={logo.src}
+        alt={logo.alt}
         fill
         className="object-contain"
         sizes="58px"
