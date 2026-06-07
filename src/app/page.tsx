@@ -113,6 +113,57 @@ function TypingAnimation() {
   );
 }
 
+/* ────────────── MULTI-LANGUAGE NAME ────────────── */
+const nameTranslations = [
+  { lang: "English", text: "javad", scale: 1 },
+  { lang: "Arabic", text: "جواد", scale: 0.95 },
+  { lang: "Hindi", text: "जवाद", scale: 0.95 },
+  { lang: "Tamil", text: "ஜவாத்", scale: 0.9 },
+  { lang: "Urdu", text: "جواد", scale: 0.95 },
+  { lang: "Chinese", text: "贾瓦德", scale: 0.75 },
+  { lang: "Japanese", text: "ジャバド", scale: 0.75 },
+  { lang: "Russian", text: "Джавад", scale: 0.85 },
+];
+
+function MultiLangName() {
+  const [index, setIndex] = useState(0);
+  const [isHovered, setIsHovered] = useState(false);
+
+  useEffect(() => {
+    let interval: NodeJS.Timeout;
+    if (isHovered) {
+      interval = setInterval(() => {
+        setIndex((prev) => (prev + 1) % nameTranslations.length);
+      }, 800);
+    }
+    return () => clearInterval(interval);
+  }, [isHovered]);
+
+  return (
+    <div
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+      className="relative cursor-default"
+    >
+      <h1 
+        className="max-w-[8ch] font-bold font-heading text-[clamp(3.9rem,12vw,5.5rem)] md:max-w-none md:text-[14vw] lg:text-[11vw] leading-[0.84] tracking-[-0.07em] text-[#1a1a1a] flex items-baseline"
+        style={{ fontFamily: 'var(--font-outfit), var(--font-noto-jp), var(--font-noto-sc), sans-serif' }}
+      >
+        <span
+          style={{ 
+            transform: `scale(${nameTranslations[index].scale})`,
+            transformOrigin: 'left baseline',
+            display: 'inline-block'
+          }}
+          className="whitespace-nowrap"
+        >
+          {nameTranslations[index].text}
+        </span>
+      </h1>
+    </div>
+  );
+}
+
 export default function Home() {
   const [dateTime, setDateTime] = useState({ day: "", time: "" });
 
@@ -202,12 +253,10 @@ export default function Home() {
                 transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
                 className="col-span-12 md:col-start-5 lg:col-start-6"
               >
-                <h2 className="mb-3 max-w-[10ch] text-[clamp(1.45rem,6vw,4rem)] font-bold leading-none tracking-tight text-black/40 font-heading">
-                  Hello — I&apos;m
+                <h2 className="mb-3 max-w-[10ch] text-[clamp(1.45rem,6vw,4rem)] font-medium leading-none tracking-tight text-black/40 font-heading">
+                  Hello — I*m
                 </h2>
-                <h1 className="max-w-[8ch] font-bold font-heading text-[clamp(3.9rem,12vw,5.5rem)] md:max-w-none md:text-[14vw] lg:text-[11vw] leading-[0.84] tracking-[-0.07em] text-[#1a1a1a]">
-                  javaadde
-                </h1>
+                <MultiLangName />
 
                 {/* Subtitle & Experience — directly under name */}
                 <div className="mt-5 flex flex-col gap-4 sm:mt-8 sm:gap-8 md:flex-row md:gap-16">

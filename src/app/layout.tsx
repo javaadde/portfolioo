@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Inter, Outfit, JetBrains_Mono } from "next/font/google";
+import { Inter, Outfit, JetBrains_Mono, Noto_Sans_JP, Noto_Sans_SC } from "next/font/google";
 import "./globals.css";
 import NavBar from "@/components/NavBar";
 import CustomCursor from "@/components/CustomCursor";
@@ -19,6 +19,16 @@ const jetbrains = JetBrains_Mono({
   subsets: ["latin"],
   weight: ["400"],
   variable: "--font-mono",
+});
+const notoJP = Noto_Sans_JP({
+  subsets: ["latin"],
+  weight: ["700"],
+  variable: "--font-noto-jp",
+});
+const notoSC = Noto_Sans_SC({
+  subsets: ["latin"],
+  weight: ["700"],
+  variable: "--font-noto-sc",
 });
 
 export const metadata: Metadata = {
@@ -41,7 +51,7 @@ export default function RootLayout({
     <html lang="en">
       <body
         suppressHydrationWarning={true}
-        className={`${inter.variable} ${outfit.variable} ${jetbrains.variable} antialiased font-body bg-background cursor-active`}
+        className={`${inter.variable} ${outfit.variable} ${jetbrains.variable} ${notoJP.variable} ${notoSC.variable} antialiased font-body bg-background cursor-active`}
       >
         <CustomCursor />
         <ConnectPopup />
