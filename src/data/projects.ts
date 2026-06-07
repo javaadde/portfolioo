@@ -20,7 +20,7 @@ export const projects: Project[] = [
         category: "Social Media Platform",
         rating: "9.4",
         image: "/abstract_tech.png",
-        description: "An all-in-one social media planning platform that helps teams think, plan, and publish content from one streamlined workspace.",
+        description: "An all-in-one social media planning platform featuring a streamlined landing page and a functional dashboard. The navigation bar design facilitates seamless movement between these core views for an optimized mobile-first experience.",
         technologies: ["Web App", "Responsive UI", "Content Planning", "Publishing Flow"],
         githubUrl: "https://github.com/devxtra-community/hayon",
         demoUrl: "https://hayon.site",

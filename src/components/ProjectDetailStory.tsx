@@ -207,6 +207,24 @@ export default function ProjectDetailStory({ project }: ProjectDetailStoryProps)
             <p className="mt-5 text-[17px] leading-[1.8] text-black/58">
               {project.solution}
             </p>
+
+            {project.mobilePreviewImage && (
+              <div className="mt-12 overflow-hidden border border-black/[0.08] bg-black/[0.02]">
+                <Image
+                  src={project.mobilePreviewImage}
+                  alt={`${project.title} mobile interface design`}
+                  width={1400}
+                  height={800}
+                  className="h-auto w-full object-cover"
+                />
+              </div>
+            )}
+
+            {project.mobilePreviewDescription && (
+              <p className="mt-8 text-[17px] leading-[1.8] text-black/58 italic">
+                {project.mobilePreviewDescription}
+              </p>
+            )}
           </div>
 
           <div id="highlights" className="mt-20 scroll-mt-28">

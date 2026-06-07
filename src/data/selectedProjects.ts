@@ -3,6 +3,7 @@ import projectOnePreview from "@/assets/project-images/project-1.png";
 import projectTwoPreview from "@/assets/project-images/project-2.png";
 import projectThreePreview from "@/assets/project-images/project-3.png";
 import projectFourPreview from "@/assets/project-images/project-4.png";
+import mobileViewHayon from "@/assets/project-images/mobile-view-hayon.png";
 
 export type SelectedProject = {
   id: string;
@@ -12,6 +13,8 @@ export type SelectedProject = {
   description: string;
   year: string;
   previewImage: StaticImageData;
+  mobilePreviewImage?: StaticImageData;
+  mobilePreviewDescription?: string;
   liveUrl?: string;
   githubUrl?: string;
   timeline: string;
@@ -31,11 +34,14 @@ export const selectedProjects: SelectedProject[] = [
     title: "Hayon",
     category: "WEB APP · INTERFACE",
     description:
-      "An all-in-one social media planning platform built to help teams think, plan, and post from one clean workspace with a fast mobile-first experience.",
+      "An all-in-one social media planning platform featuring a streamlined landing page and a functional dashboard, designed with a focus on seamless mobile navigation.",
     year: "2026",
     liveUrl: "https://hayon.site",
     githubUrl: "https://github.com/devxtra-community/hayon",
     previewImage: projectOnePreview,
+    mobilePreviewImage: mobileViewHayon,
+    mobilePreviewDescription:
+      "The dashboard and navigation system showcase a refined UI/UX approach, prioritizing clarity and ease of use on smaller screens. The navigation bar is designed for thumb-friendly interaction, allowing users to switch contexts without friction, while the dashboard layout organizes complex data into digestible, visually balanced modules that maintain high readability and engagement.",
     timeline: "2026",
     projectType: "Social media web app",
     tools: ["Next.js", "TypeScript", "Responsive UI"],
@@ -45,7 +51,7 @@ export const selectedProjects: SelectedProject[] = [
     challenge:
       "The product needed to make social media planning feel organized and approachable while still supporting a professional publishing workflow.",
     solution:
-      "I shaped the experience around a clean mobile-first interface, clear content organization, and direct navigation between planning, reviewing, and publishing actions.",
+      "I shaped the experience around a clean mobile-first interface, featuring a streamlined landing page and a functional dashboard. The navigation bar design facilitates seamless movement between these core views, ensuring a cohesive user journey.",
     highlights: [
       "Unified planning workspace",
       "Mobile-first interface direction",
