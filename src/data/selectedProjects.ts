@@ -121,6 +121,8 @@ export const selectedProjects: SelectedProject[] = [
     description:
       "A kids fashion ecommerce website with an integrated admin panel for managing products, collections, and store content from one clean dashboard.",
     year: "2026",
+    liveUrl: "https://kids-wearing-ecom.vercel.app/",
+    githubUrl: "https://github.com/javaadde/kids-wearing-ecom",
     previewImage: projectFourPreview,
     timeline: "2026",
     projectType: "Kids fashion ecommerce",

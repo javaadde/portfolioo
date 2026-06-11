@@ -71,21 +71,20 @@ export const projects: Project[] = [
     },
     {
         id: 4,
-        name: "Panto-design clone",
-        slug: "panto-design-clone",
-        category: "Design",
-        rating: "8.9",
-        image: "/projects/design-clone.png",
-        description: "A Fully-Responsive Landing page desing of panto which is cloned for purpose of studying",
-        technologies: ["html", "javaScript", "tailwindcss",],
-        githubUrl: "https://github.com/javaadde/FigmaDesign",
-        demoUrl: "https://javaadde.github.io/FigmaDesign/two/design.html",
+        name: "Kido",
+        slug: "kido",
+        category: "Kids Fashion Ecommerce",
+        rating: "9.1",
+        image: "/projects/project-4.png",
+        description: "A kids fashion ecommerce website with an integrated admin panel for managing products, collections, and store content from one clean dashboard.",
+        technologies: ["Next.js", "TypeScript", "Tailwind CSS", "Admin Panel"],
+        githubUrl: "https://github.com/javaadde/kids-wearing-ecom",
+        demoUrl: "https://kids-wearing-ecom.vercel.app/",
         features: [
-            "User authentication and profiles",
-            "Post creation with media upload",
-            "Real-time chat messaging",
-            "Like, comment, and share functionality",
-            "Follow/unfollow system"
+            "Kids fashion storefront",
+            "Integrated admin dashboard",
+            "Product and collection management",
+            "Responsive shopping experience"
         ]
     },
     {
