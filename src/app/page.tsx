@@ -202,6 +202,7 @@ export default function Home() {
   ];
 
   const mobileHighlightExperiences = [
+    { id: "bytsov", label: "Bytsov, Kochi, Ind" },
     { id: "devxtra", label: "Devxtra, Kochi, Ind" },
   ];
 
@@ -295,6 +296,14 @@ export default function Home() {
                         [EXPERIENCE]
                       </span>
                       <div className="flex flex-col gap-1">
+                        <div className="flex items-center gap-2">
+                          <span className="text-[12px] sm:text-[13px] text-black/20">
+                            →
+                          </span>
+                          <span className="text-[12px] sm:text-[13px] text-[#1a1a1a] font-medium tracking-tight underline decoration-black/10 underline-offset-4">
+                            Bytsov, Kochi, Ind
+                          </span>
+                        </div>
                         <div className="flex items-center gap-2">
                           <span className="text-[12px] sm:text-[13px] text-black/20">
                             →
