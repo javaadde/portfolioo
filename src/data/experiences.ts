@@ -1,3 +1,13 @@
+export interface ExperienceProduct {
+  name: string;
+  tagline?: string;
+  description: string;
+  role: string;
+  link?: string;
+  logo?: string;
+  type: "Shipped Product" | "Contributed Product";
+}
+
 export interface ExperienceItem {
   id: string;
   company: string;
@@ -11,12 +21,7 @@ export interface ExperienceItem {
   tagline: string;
   summary: string;
   highlights: string[];
-  products: {
-    name: string;
-    description: string;
-    role: string;
-    link?: string;
-  }[];
+  products: ExperienceProduct[];
   techStack: string[];
   accentColor: string;
   metrics: {
@@ -30,7 +35,7 @@ export const experiencesData: ExperienceItem[] = [
     id: "bytsolv",
     company: "Bytsolv",
     fullName: "Bytsolv Technologies",
-    role: "Full-Stack Developer",
+    role: "Software Developer",
     location: "Kochi, Kerala, India",
     period: "2024 — Present",
     durationMonths: 14,
@@ -47,23 +52,38 @@ export const experiencesData: ExperienceItem[] = [
     ],
     products: [
       {
-        name: "Enterprise Cloud Dashboard",
-        description: "Real-time telemetry and resource management console for cloud deployments.",
-        role: "Lead Full-Stack Architecture",
-      },
-      {
-        name: "Client eCommerce & Commerce Flow",
-        description: "Custom headless checkout portal with high availability and automated inventory sync.",
-        role: "Frontend & API Integration",
-      },
-      {
-        name: "Internal Analytics Engine",
-        description: "Custom data visualization dashboard with interactive graphs and export utilities.",
+        name: "Papr",
+        tagline: "Financial paperwork, tracked",
+        description:
+          "Who owes you. Who you owe. What's in the bank. Paperwork tracking for small companies without an accountant. Ledger, invoices, expense tracking & PDF storage.",
         role: "Full-Stack Development",
+        link: "https://papr.work/",
+        logo: "/papr.png",
+        type: "Shipped Product",
+      },
+      {
+        name: "remain.fit",
+        tagline: "The real challenge isn't getting fit. It's remaining fit.",
+        description:
+          "Small, single-purpose tools for the hard part of fitness: remaining fit. Fasting, weight, streaks, and hydration with one account and a quiet design language.",
+        role: "Frontend & Web Engineering",
+        link: "https://remain.fit/",
+        logo: "/remain.png",
+        type: "Contributed Product",
+      },
+      {
+        name: "SmileOX",
+        tagline: "Consumer gateway before clinical care begins",
+        description:
+          "Complete growth operating system for dental clinics. Automated patient communications, AI-driven enquiry actions, marketing pipelines, and actionable practice analytics.",
+        role: "Frontend & Feature Engineering",
+        link: "https://smileox.com.au/",
+        logo: "/smileox.png",
+        type: "Contributed Product",
       },
     ],
     techStack: ["Next.js", "TypeScript", "React", "Node.js", "PostgreSQL", "Tailwind CSS", "Docker"],
-    accentColor: "#22b34a",
+    accentColor: "#7c3aed",
     metrics: [
       { label: "EXPERIENCE", value: "1.2 YRS" },
       { label: "SHIPPED", value: "5+ APPS" },
@@ -91,24 +111,27 @@ export const experiencesData: ExperienceItem[] = [
     ],
     products: [
       {
-        name: "Hayon Platform",
-        description: "All-in-one social planning and scheduling suite with mobile-first navigation and rich dashboards.",
+        name: "Hayon",
+        tagline: "All-in-one social planning & workspace platform",
+        description:
+          "Streamlined social media workspace featuring an intuitive mobile-first landing experience and a full functional scheduling dashboard.",
         role: "Core Frontend & Interactions",
-        link: "https://github.com/devxtra-community/hayon",
+        link: "https://hayon.site",
+        logo: "/hayon.webp",
+        type: "Shipped Product",
       },
       {
         name: "DevX Component Guild",
-        description: "Modular accessible component kit designed for rapid product prototyping.",
+        tagline: "Modular accessible component kit",
+        description:
+          "Modular accessible UI component library and prototyping kit authoring interactive GSAP micro-interactions.",
         role: "Design System & UI Engineering",
-      },
-      {
-        name: "Event & Hackathon Portals",
-        description: "High-impact interactive landing pages with custom shaders and micro-animations.",
-        role: "Creative Motion & Engineering",
+        link: "https://github.com/devxtra-community/hayon",
+        type: "Contributed Product",
       },
     ],
     techStack: ["React", "TypeScript", "GSAP", "Tailwind CSS", "Framer Motion", "Next.js", "Zustand"],
-    accentColor: "#3b82f6",
+    accentColor: "#16a34a",
     metrics: [
       { label: "EXPERIENCE", value: "8 MOS" },
       { label: "PRODUCTS", value: "3 SHIPPED" },

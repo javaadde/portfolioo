@@ -113,7 +113,7 @@ export default function ExperienceGlassPreview({
 
         {/* FEATURE / TAGLINE (no border) */}
         <div className="relative z-10 mb-4 flex items-center gap-2 text-black/60 font-mono text-[10px] tracking-wide">
-          <span className="text-[#22b34a] font-bold">→</span>
+          <span className="font-bold" style={{ color: experience.accentColor }}>→</span>
           <span className="font-medium uppercase line-clamp-1">
             {experience.tagline}
           </span>

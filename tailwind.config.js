@@ -16,6 +16,8 @@ module.exports = {
         heading: ["var(--font-outfit)", "sans-serif"],
         body: ["var(--font-inter)", "sans-serif"],
         mono: ["var(--font-mono)", "monospace"],
+        grotesk: ["var(--font-grotesk)", "sans-serif"],
+        serif: ["var(--font-serif)", "Georgia", "serif"],
       },
     },
   },
