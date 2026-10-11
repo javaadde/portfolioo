@@ -1,44 +1,34 @@
 import type { Metadata } from "next";
-import { Inter, Outfit, JetBrains_Mono, Noto_Sans_JP, Noto_Sans_SC } from "next/font/google";
+import { Inter, Outfit, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import NavBar from "@/components/NavBar";
-import CustomCursor from "@/components/CustomCursor";
-import ConnectPopup from "@/components/ConnectPopup";
+import GrainOverlay from "@/components/GrainOverlay";
+import SmoothScrollProvider from "@/components/SmoothScrollProvider";
 
 const inter = Inter({
   subsets: ["latin"],
   weight: ["400", "500", "600"],
   variable: "--font-inter",
 });
+
 const outfit = Outfit({
   subsets: ["latin"],
   weight: ["400", "500", "600", "700", "800", "900"],
   variable: "--font-outfit",
 });
+
 const jetbrains = JetBrains_Mono({
   subsets: ["latin"],
-  weight: ["400"],
+  weight: ["400", "500", "700"],
   variable: "--font-mono",
-});
-const notoJP = Noto_Sans_JP({
-  subsets: ["latin"],
-  weight: ["700"],
-  variable: "--font-noto-jp",
-});
-const notoSC = Noto_Sans_SC({
-  subsets: ["latin"],
-  weight: ["700"],
-  variable: "--font-noto-sc",
 });
 
 export const metadata: Metadata = {
-  title: "Javad | Full Stack Developer",
+  title: "JAVAD | Creative Technologist & Full-Stack Developer",
   description:
-    "Full-stack developer focused on solving real problems through clean architecture, systems thinking, and modern web technologies.",
+    "Building change-making web experiences for ambitious founders and brands who refuse to be underestimated. Powered by Next.js, GSAP & Lenis.",
   icons: {
-    icon: "/icon.svg",
-    shortcut: "/icon.svg",
-    apple: "/icon.svg",
+    icon: "/favicon.ico",
   },
 };
 
@@ -48,15 +38,16 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
+    <html lang="en" className="lenis">
       <body
         suppressHydrationWarning={true}
-        className={`${inter.variable} ${outfit.variable} ${jetbrains.variable} ${notoJP.variable} ${notoSC.variable} antialiased font-body bg-background cursor-active`}
+        className={`${inter.variable} ${outfit.variable} ${jetbrains.variable} antialiased font-body bg-[#f1f6ec] text-[#0d150e] overflow-x-hidden`}
       >
-        <CustomCursor />
-        <ConnectPopup />
-        <NavBar />
-        <main className="relative z-[2]">{children}</main>
+        <SmoothScrollProvider>
+          <GrainOverlay />
+          <NavBar />
+          <main className="relative z-[2]">{children}</main>
+        </SmoothScrollProvider>
       </body>
     </html>
   );

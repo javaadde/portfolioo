@@ -97,7 +97,7 @@ export default function ConnectPopup() {
             role="dialog"
             aria-modal="true"
             aria-labelledby="connect-title"
-            className="relative w-full max-w-[460px] border border-black/[0.08] bg-[#f4f3ef] p-5 shadow-2xl md:p-6"
+            className="relative w-full max-w-[460px] border border-black/[0.08] bg-[#f1f6ec] p-5 shadow-2xl md:p-6"
             initial={{ opacity: 0, y: 24, scale: 0.96 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 16, scale: 0.96 }}

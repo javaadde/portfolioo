@@ -1,9 +1,12 @@
 @import "tailwindcss";
 
 @theme {
-  --color-background: #f4f3ef;
-  --color-foreground: #1a1a1a;
-  --color-accent: #006054;
+  --color-background: #f1f6ec;
+  --color-foreground: #0d150e;
+  --color-accent: #22b34a;
+  --color-carbon: #0b150c;
+  --color-sand: #eaf7e2;
+  --color-warm-gray: #787571;
 
   --font-heading: "Outfit", sans-serif;
   --font-body: "Inter", sans-serif;
@@ -11,17 +14,126 @@
 }
 
 :root {
-  --background: #f4f3ef;
-  --foreground: #1a1a1a;
-  --accent: #006054;
-  --grid-line: rgba(0, 0, 0, 0.04);
+  --background: #f1f6ec;
+  --foreground: #0d150e;
+  --accent: #2c8a4b;
+  --grid-line: rgba(20, 60, 30, 0.07);
 }
 
-html {
-  scroll-behavior: smooth;
+/* ===== GRASSY SKY ATMOSPHERE (floating iridescent light blobs) ===== */
+@keyframes blob-drift {
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+  33% {
+    transform: translate(4%, -6%) scale(1.08);
+  }
+  66% {
+    transform: translate(-4%, 4%) scale(0.95);
+  }
+}
+
+.grass-blob {
+  position: absolute;
+  border-radius: 9999px;
+  pointer-events: none;
+  filter: blur(70px);
+  animation: blob-drift 14s ease-in-out infinite;
+  will-change: transform;
+}
+
+.grass-blob-a {
+  background: radial-gradient(circle at 35% 35%, rgba(34, 179, 74, 0.22), rgba(120, 220, 160, 0.1) 60%, transparent 75%);
+}
+
+.grass-blob-b {
+  background: radial-gradient(circle at 60% 40%, rgba(150, 90, 255, 0.14), rgba(90, 180, 255, 0.08) 55%, transparent 75%);
+}
+
+.grass-blob-c {
+  background: radial-gradient(circle at 45% 55%, rgba(255, 160, 60, 0.12), rgba(255, 110, 90, 0.07) 55%, transparent 75%);
+}
+
+/* ===== HAIRLINE GRID OVERLAY (screenshot hero grid) ===== */
+.grass-grid {
+  background-image:
+    linear-gradient(to right, rgba(20, 60, 30, 0.075) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(20, 60, 30, 0.075) 1px, transparent 1px);
+  background-size: 12.5% 33.33%;
+}
+
+@media (max-width: 767px) {
+  .grass-grid {
+    background-size: 25% 25%;
+  }
+}
+
+/* Lenis smooth scrolling */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+/* Film grain keyframes */
+@keyframes grain-animation {
+  0%, 100% { transform: translate(0, 0); }
+  10% { transform: translate(-5%, -10%); }
+  25% { transform: translate(7%, -15%); }
+  40% { transform: translate(-8%, 5%); }
+  55% { transform: translate(12%, 9%); }
+  70% { transform: translate(9%, -6%); }
+  85% { transform: translate(-3%, 7%); }
+}
+
+.animate-grain {
+  animation: grain-animation 0.5s steps(8) infinite;
+  will-change: transform;
+}
+
+/* Monolog link underline fill */
+[data-link-hover] {
+  position: relative;
+  overflow: hidden;
+}
+
+[data-link-hover]::before {
+  content: '';
+  position: absolute;
+  bottom: 0px;
+  left: 0;
+  z-index: 0;
+  width: 100%;
+  height: 100%;
+  transform-origin: right;
+  transform: scaleX(0);
+  background-color: rgba(34, 179, 74, 0.14);
+  transition: transform 600ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+[data-link-hover]:hover::before {
+  transform-origin: left;
+  transform: scaleX(1);
 }
 
 @layer base {
+  html,
+  body {
+    cursor: url('/cursors/bibata-default.svg') 7 2, auto;
+  }
+
   body {
     background-color: var(--background);
     color: var(--foreground);
@@ -30,23 +142,53 @@ html {
   }
 
   ::selection {
-    background: rgba(0, 96, 84, 0.15);
+    background: rgba(34, 179, 74, 0.22);
   }
-}
 
-/* ===== CUSTOM CURSOR ===== */
-.cursor-active {
-  cursor: none !important;
-}
+  a,
+  button,
+  [role="button"],
+  input[type="submit"],
+  input[type="button"],
+  input[type="reset"],
+  select,
+  summary,
+  .cursor-pointer,
+  a *,
+  button *,
+  [role="button"] * {
+    cursor: url('/cursors/bibata-pointer.svg') 14 2, pointer;
+  }
 
-.cursor-active * {
-  cursor: none !important;
-}
+  input[type="text"],
+  input[type="email"],
+  input[type="search"],
+  input[type="password"],
+  input[type="tel"],
+  input[type="url"],
+  input[type="number"],
+  textarea,
+  [contenteditable="true"] {
+    cursor: url('/cursors/bibata-text.svg') 16 16, text;
+  }
 
-.cursor-active a,
-.cursor-active button,
-.cursor-active [role="button"] {
-  cursor: pointer !important;
+  .cursor-grab,
+  [data-cursor="grab"] {
+    cursor: url('/cursors/bibata-grab.svg') 18 10, grab;
+  }
+
+  .cursor-grabbing,
+  .cursor-grab:active,
+  [data-cursor="grabbing"] {
+    cursor: url('/cursors/bibata-grabbing.svg') 16 8, grabbing;
+  }
+
+  button:disabled,
+  button[disabled],
+  input:disabled,
+  [aria-disabled="true"] {
+    cursor: not-allowed;
+  }
 }
 
 /* ===== GRID BACKGROUND ===== */
@@ -68,22 +210,22 @@ html {
   background:
     radial-gradient(
       ellipse 80% 60% at 50% 0%,
-      rgba(0, 140, 180, 0.06) 0%,
+      rgba(34, 179, 74, 0.07) 0%,
       transparent 70%
     ),
     radial-gradient(
       ellipse 60% 50% at 0% 50%,
-      rgba(0, 100, 200, 0.04) 0%,
+      rgba(120, 200, 255, 0.05) 0%,
       transparent 60%
     ),
     radial-gradient(
       ellipse 60% 50% at 100% 50%,
-      rgba(0, 100, 200, 0.04) 0%,
+      rgba(150, 120, 255, 0.04) 0%,
       transparent 60%
     ),
     radial-gradient(
       ellipse 80% 40% at 50% 100%,
-      rgba(0, 140, 180, 0.05) 0%,
+      rgba(34, 179, 74, 0.06) 0%,
       transparent 60%
     );
 }
@@ -192,7 +334,7 @@ html {
 
 .connect-btn:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 32px rgba(0, 96, 84, 0.25);
+  box-shadow: 0 8px 32px rgba(34, 179, 74, 0.3);
 }
 
 /* ===== FOOTER CTA ===== */
@@ -376,7 +518,7 @@ html {
   bottom: calc(100% + 10px);
   width: min(290px, calc(100vw - 24px));
   border: 1px solid rgba(0, 0, 0, 0.1);
-  background: rgba(244, 243, 239, 0.94);
+  background: rgba(240, 248, 236, 0.94);
   box-shadow: 0 18px 45px rgba(0, 0, 0, 0.14);
   padding: 10px;
   backdrop-filter: blur(18px);
@@ -387,7 +529,7 @@ html {
   width: min(320px, calc(100vw - 24px));
   min-height: 48px;
   border: 1px solid rgba(0, 0, 0, 0.09);
-  background: rgba(244, 243, 239, 0.96);
+  background: rgba(240, 248, 236, 0.96);
   box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
   padding: 13px 14px;
   backdrop-filter: blur(16px);
@@ -432,7 +574,7 @@ html {
   height: 16px;
   border-right: 1px solid rgba(0, 0, 0, 0.09);
   border-bottom: 1px solid rgba(0, 0, 0, 0.09);
-  background: rgba(244, 243, 239, 0.96);
+  background: rgba(240, 248, 236, 0.96);
   box-shadow: 8px 8px 18px rgba(0, 0, 0, 0.04);
   transform: rotate(45deg);
 }
@@ -446,7 +588,7 @@ html {
   height: 12px;
   border-right: 1px solid rgba(0, 0, 0, 0.1);
   border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-  background: rgba(244, 243, 239, 0.94);
+  background: rgba(240, 248, 236, 0.94);
   transform: rotate(45deg);
 }
 
@@ -509,7 +651,7 @@ html {
 
 .robo-chat-log .from-user {
   align-self: flex-end;
-  background: #006054;
+  background: #1d7a37;
   color: white;
   padding: 7px 8px;
 }
@@ -535,7 +677,7 @@ html {
 }
 
 .robo-chat-form input:focus {
-  border-color: rgba(0, 96, 84, 0.45);
+  border-color: rgba(34, 179, 74, 0.55);
 }
 
 .robo-chat-form button {
@@ -661,32 +803,6 @@ html {
   }
 }
 
-/* ===== CUSTOM CURSOR PILL ===== */
-.cursor-pill {
-  position: fixed;
-  pointer-events: none;
-  z-index: 9999;
-  background: var(--foreground);
-  color: white;
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  padding: 8px 18px;
-  border-radius: 100px;
-  opacity: 0;
-  transform: translate(-50%, -50%) scale(0.6);
-  transition:
-    opacity 0.25s ease,
-    transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-  white-space: nowrap;
-}
-
-.cursor-pill.visible {
-  opacity: 1;
-  transform: translate(-50%, -50%) scale(1);
-}
-
 @media (max-width: 767px) {
   .grid-background {
     background-size: 25% 100%;
@@ -700,4 +816,16 @@ html {
     font-size: clamp(2.75rem, 14vw, 5rem);
     line-height: 0.92;
   }
+}
+
+.fluted-glass {
+  background-image: repeating-linear-gradient(
+    to right,
+    rgba(255, 255, 255, 0.05) 0px,
+    rgba(255, 255, 255, 0.05) 39px,
+    rgba(255, 255, 255, 0.3) 39px,
+    rgba(255, 255, 255, 0.8) 40px
+  );
+  backdrop-filter: blur(28px) saturate(120%);
+  -webkit-backdrop-filter: blur(28px) saturate(120%);
 }

@@ -107,7 +107,7 @@ export default function PixelLoadingPreview({
   return (
     <div
       ref={previewRef}
-      className="relative mx-auto mt-4 w-[calc(100%-1rem)] max-w-[1240px] border border-black/[0.06] bg-[#f1f0ec] shadow-[0_18px_50px_rgba(0,0,0,0.055)] md:mt-14 md:w-full md:shadow-none"
+      className="relative mx-auto mt-4 w-[calc(100%-1rem)] max-w-[1240px] border border-black/[0.06] bg-[#eef5e7] shadow-[0_18px_50px_rgba(0,0,0,0.055)] md:mt-14 md:w-full md:shadow-none"
     >
       <span className="corner-cross tl" />
       <span className="corner-cross tr" />

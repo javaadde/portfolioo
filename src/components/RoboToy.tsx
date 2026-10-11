@@ -592,7 +592,9 @@ export default function RoboToy({ variant = "home" }: { variant?: RoboVariant })
         style={{
           width: robotSize,
           height: getRobotHeight(robotSize),
-          cursor: isDragging ? "grabbing" : "grab",
+          cursor: isDragging
+            ? "url('/cursors/bibata-grabbing.svg') 16 8, grabbing"
+            : "url('/cursors/bibata-grab.svg') 18 10, grab",
           transform: `scaleX(${isWalking ? facing : 1})`,
         }}
       >

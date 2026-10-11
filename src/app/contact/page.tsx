@@ -79,11 +79,11 @@ export default function Contact() {
             <AnimatedBlock delay={0.2}>
               <div className="flex flex-col gap-6 mb-12">
                 <Link
-                  href="mailto:your@email.com"
+                  href="mailto:javaadde@gmail.com"
                   className="group flex items-center gap-4 text-xl md:text-2xl font-bold text-black/80 hover:text-accent transition-colors duration-300"
                 >
                   <Mail className="w-5 h-5 text-black/30 group-hover:text-accent transition-colors" />
-                  your@email.com
+                  javaadde@gmail.com
                 </Link>
               </div>
             </AnimatedBlock>

@@ -78,7 +78,7 @@
   border-radius: 128px;
   border: 1px solid transparent;
   transition: 0.2s;
-  cursor: pointer;
+  cursor: url('/cursors/bibata-pointer.svg') 14 2, pointer;
   width: fit-content;
   font-weight: 500;
 }
